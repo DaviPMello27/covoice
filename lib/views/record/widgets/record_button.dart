@@ -4,9 +4,11 @@ import '../../themes.dart';
 
 class RecordButton extends StatefulWidget {
   final void Function() onTap;
+  final bool isRecording;
 
   const RecordButton({
     required this.onTap,
+    required this.isRecording,
     Key? key,
   }) : super(key: key);
 
@@ -36,7 +38,7 @@ class _RecordButtonState extends State<RecordButton> {
           child: Padding(
             padding: EdgeInsets.all(WidthProportion.of(context).oneSixth),
             child: Icon(
-              Icons.mic,
+              widget.isRecording ? Icons.stop : Icons.mic,
               size: iconSize,
               color: Theme.of(context).backgroundColor,
             ),

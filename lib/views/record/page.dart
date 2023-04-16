@@ -1,17 +1,21 @@
-import 'package:covoice/controller/audio_controller_interface.dart';
+import 'package:covoice/controller/player_controller_inteface.dart';
+import 'package:covoice/controller/recording_controller_interface.dart';
 import 'package:flutter/material.dart';
 import './widgets/key_roller_list.dart';
 import './widgets/record_button.dart';
 
 class MainPage extends StatefulWidget {
-  final IAudioController audioController;
-  const MainPage({required this.audioController, Key? key}) : super(key: key);
+  final IRecordingController recordingController;
+  final IPlayerController playerController;
+  const MainPage({required this.recordingController, required this.playerController, Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+  bool isRecording = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +34,27 @@ class _MainPageState extends State<MainPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   subtitle('Choose the song\'s key'),
-                  KeyRollerList(keys: widget.audioController.getKeys()),
+                  KeyRollerList(keys: widget.recordingController.getKeys()),
                   subtitle('and click the button below to start recording.'),
-                  RecordButton(onTap: () async {
-                    widget.audioController.recordStream((p0) => {});
-                  })
+                  RecordButton(
+                    onTap: () async {
+                      if(isRecording){
+                        String? path = await widget.recordingController.stopRecordingStream();
+                        setState(() {
+                          isRecording = false;
+                        });
+                        if(path != null){
+                          widget.playerController.playAudio(path);
+                        }
+                      } else {
+                        setState(() {
+                          isRecording = true;
+                        });
+                        String? path = await widget.recordingController.startRecordingStream((p0) {}, (amp){});
+                      }
+                    },
+                    isRecording: isRecording,
+                  )
                 ],
               ),
             ),
