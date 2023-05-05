@@ -8,4 +8,6 @@ abstract class IMusicModel {
   List<double> getFrequencies();
   double getNearestFrequency(double frequency);
   String getNearestNote(double frequency);
+  String getNearestNoteInKey(double frequency, String key);
+  void setKey(String key);
 }

@@ -65,7 +65,6 @@ class _MainPageState extends State<MainPage> {
                         await stopRecording();
                       } else {
                         setState(() {
-                          recordingStartTime = DateTime.now();
                           isRecording = true;
                           lastNote = null;
                           noteList.add(
@@ -76,11 +75,13 @@ class _MainPageState extends State<MainPage> {
                             )
                           );
                         });
+
+                        widget.musicController.setKey(key);
                         
                         await widget.recordingController.startRecordingStream(
                           (frequency){
-                            if(frequency != -1.0){
-                              String note = widget.musicController.getNearestNote(frequency);
+                            if(frequency != -1.0 && frequency > 100 && frequency < 800){
+                              String note = widget.musicController.getNearestNoteInKey(frequency, key);
                               if(lastNote != note && recordingStartTime != null){
                                 setState(() {
                                   noteList.add(
@@ -113,8 +114,12 @@ class _MainPageState extends State<MainPage> {
                             }
                           },  */
                           (amp){
-                            log("Amp $amp");
-                          });
+                            /* log("Amp $amp"); */
+                          }
+                        );
+                        setState(() {
+                          recordingStartTime = DateTime.now();
+                        });
                       }
                     },
                     isRecording: isRecording,
@@ -143,7 +148,7 @@ class _MainPageState extends State<MainPage> {
     List<Note> newNoteList = [];
     noteList.asMap().forEach((index, note) {
       if(index < noteList.length - 1){
-        if(noteList[index + 1].getTime - note.getTime > 0.5){
+        if(noteList[index + 1].getTime - note.getTime > 0.2){
           newNoteList.add(note);
         }
       } else {
@@ -154,12 +159,13 @@ class _MainPageState extends State<MainPage> {
 
     setState(() {
       isRecording = false;
+      noteList = [];
     });
     if(path != null){
       String newPath = await widget.ffmpegController.transformIntoHarmony(path, newNoteList, key);
-      widget.playerController.playAudio(newPath);
-    }
-    noteList = [];
+      widget.playerController.playAudiosTogether(newPath, path);
+      //widget.playerController.playAudio(newPath);
+    } 
   }
 
   Widget subtitle(String text) {

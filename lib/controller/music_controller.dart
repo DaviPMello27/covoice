@@ -41,6 +41,16 @@ class MusicController implements IMusicController {
   String getNearestNote(double frequency) {
     return musicModel.getNearestNote(frequency);
   }
+
+  @override
+  String getNearestNoteInKey(double frequency, String key) {
+    return musicModel.getNearestNoteInKey(frequency, key);
+  }
+
+  @override
+  void setKey(String key){
+    return musicModel.setKey(key);
+  }
   
 }
 

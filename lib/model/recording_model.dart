@@ -8,6 +8,8 @@ import 'package:pitch_detector_dart/pitch_detector.dart';
 import 'package:pitch_detector_dart/pitch_detector_result.dart';
 import 'package:record/record.dart';
 
+import 'music_model.dart';
+import 'music_model_inteface.dart';
 import 'recording_model_interface.dart';
 
 /*
@@ -21,7 +23,8 @@ https://techpotatoes.com/2021/07/27/implementing-a-guitar-tuner-app-in-dart-flut
 class RecordingModel implements IRecordingModel {
   static FlutterFft? _flutterFft;
   final FlutterAudioCapture audioCapture = FlutterAudioCapture();
-  final PitchDetector pitchDetector = PitchDetector(44100, 500);
+  final PitchDetector pitchDetector = PitchDetector(44100, 3000);
+  final IMusicModel musicModel = MusicModel();
   //static FlutterSoundRecorder? _soundRecorder;
   static Record? _recorder;
 
@@ -63,10 +66,10 @@ class RecordingModel implements IRecordingModel {
         var buffer = Float64List.fromList(obj.cast<double>());
         final List<double> audioSample = buffer.toList();
         PitchDetectorResult result = pitchDetector.getPitch(audioSample);
-        print('frequency: ${result.pitch}, probability: ${result.probability}');
+        print('frequency: ${result.pitch}, note: ${musicModel.getNearestNote(result.pitch)}, probability: ${result.probability}');
         if(result.probability < 0.8){
           return -1.0;
-        }
+        } 
         onFrequencyChanged(result.pitch);
       },
       (error) => {log('error!')}
