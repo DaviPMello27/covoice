@@ -29,14 +29,9 @@ class RecordingModel implements IRecordingModel {
   static Record? _recorder;
 
   static FlutterFft getFlutterFftInstance(){
-    RecordingModel._flutterFft ??= FlutterFft();
+    RecordingModel._flutterFft ??= FlutterFft();  
     return RecordingModel._flutterFft!;
   }
-
-  /* static FlutterSoundRecorder getRecorderInstance(){
-    RecordingModel._soundRecorder ??= FlutterSoundRecorder();
-    return RecordingModel._soundRecorder!;
-  } */
 
   static Record getRecorderInstance(){
     RecordingModel._recorder ??= Record();
@@ -58,15 +53,16 @@ class RecordingModel implements IRecordingModel {
     await requestRecordingPermission();
 
     await getRecorderInstance().start();
-    //await getFlutterFftInstance().startRecorder();
-    
+
+    DateTime startTime = DateTime.now();
+
     getRecorderInstance().onAmplitudeChanged(const Duration(milliseconds: 200)).listen(onAmplitudeChanged);
     await audioCapture.start(
       (obj){
         var buffer = Float64List.fromList(obj.cast<double>());
         final List<double> audioSample = buffer.toList();
         PitchDetectorResult result = pitchDetector.getPitch(audioSample);
-        print('frequency: ${result.pitch}, note: ${musicModel.getNearestNote(result.pitch)}, probability: ${result.probability}');
+        print('note: ${musicModel.getNearestNote(result.pitch)}, timestamp: ${DateTime.now().difference(startTime).inMilliseconds}, frequency: ${result.pitch}, probability: ${result.probability}');
         if(result.probability < 0.8){
           return -1.0;
         } 
@@ -74,17 +70,6 @@ class RecordingModel implements IRecordingModel {
       },
       (error) => {log('error!')}
     );
-    /* getFlutterFftInstance().onRecorderStateChanged.listen(
-      (data) {
-        onStateChanged(data);
-      },
-      onError: (error) {
-        print(error); //TODO: Implement  message.
-      },
-      onDone: () {
-        //TODO: Finish recording
-      },
-    ); */
   }
 
   @override
