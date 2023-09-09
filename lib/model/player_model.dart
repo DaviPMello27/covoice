@@ -21,6 +21,17 @@ class PlayerModel implements IPlayerModel {
     player.setFilePath(path);
     return player.play();
   }
+
+  @override
+  Future playAudiosTogether(String path1, String path2) async {
+    final AudioPlayer player = AudioPlayer();
+    player.setFilePath(path1);
+
+    final AudioPlayer player2 = AudioPlayer();
+    player2.setFilePath(path2);
+    await Future.wait([player.play(), player2.play()]);
+    return;
+  }
   
 }
 

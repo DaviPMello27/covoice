@@ -8,8 +8,8 @@ class RecordingController implements IRecordingController {
   RecordingController(this.recordingModel);
 
   @override
-  Future startRecordingStream(Function(List<Object>) onStateChanged, Function(Amplitude) onAmplitudeChanged){
-    return recordingModel.startRecordingStream(onStateChanged, onAmplitudeChanged); //TODO: Implement amplitude function
+  Future startRecordingStream(Function(double) onFrequencyChanged, Function(Amplitude) onAmplitudeChanged){
+    return recordingModel.startRecordingStream(onFrequencyChanged, onAmplitudeChanged); //TODO: Implement amplitude function
   }
 
   @override

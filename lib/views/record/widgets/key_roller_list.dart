@@ -4,8 +4,9 @@ import '../../themes.dart';
 
 class KeyRollerList extends StatefulWidget {
   final List<String> keys;
+  final Function(String)? onSelect;
 
-  const KeyRollerList({required this.keys, Key? key}) : super(key: key);
+  const KeyRollerList({required this.keys, this.onSelect, Key? key}) : super(key: key);
 
   @override
   _KeyRollerListState createState() => _KeyRollerListState();
@@ -36,7 +37,11 @@ class _KeyRollerListState extends State<KeyRollerList> {
         visibilityRadius: 2,
         dividerColor: Colors.white,
         width: WidthProportion.of(context).oneThird,
-        onSelectedIndexChanged: print,
+        onSelectedIndexChanged: (index) {
+          if(widget.onSelect != null){
+            widget.onSelect!(widget.keys[index]);            
+          }
+        },
         items: widget.keys
             .map<Widget>(
               (note) => Center(

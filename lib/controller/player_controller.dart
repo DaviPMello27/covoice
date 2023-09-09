@@ -11,6 +11,11 @@ class PlayerController implements IPlayerController {
   Future playAudio(String path) {
     return playerModel.playAudio(path);
   }
-  
+
+  @override
+  Future playAudiosTogether(String path1, String path2) {
+    return playerModel.playAudiosTogether(path1, path2);
+  }
+
 }
 
