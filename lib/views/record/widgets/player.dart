@@ -59,7 +59,7 @@ class PlayerState extends State<Player> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(500)), //500? fix
+        borderRadius: const BorderRadius.all(Radius.circular(500)), //TODO: 500? fix! get computed value or something
         color: Theme.of(context).textTheme.subtitle1?.color,
       ),
       child: Row(
@@ -77,13 +77,13 @@ class PlayerState extends State<Player> {
                   : shouldRestart 
                     ? Icons.replay 
                     : Icons.play_arrow_rounded,
-                size: 36,
+                size: 28,
                 color: Theme.of(context).textTheme.subtitle2!.color!,
               )
             ),
           ),
           AudioFileWaveforms(
-            size: Size(MediaQuery.of(context).size.width / 2.5, 100.0),
+            size: Size(MediaQuery.of(context).size.width / 2.5, 80.0),
             playerController: widget.controller,
             enableSeekGesture: true,
             waveformType: WaveformType.fitWidth,
@@ -100,7 +100,7 @@ class PlayerState extends State<Player> {
               padding: const EdgeInsets.all(0),
               icon: Icon(
                 Icons.share,
-                size: 24,
+                size: 20,
                 color: Theme.of(context).textTheme.subtitle2!.color!,
               )
             ),

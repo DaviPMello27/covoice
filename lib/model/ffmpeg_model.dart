@@ -41,4 +41,15 @@ class FFmpegModel implements IFFmpegModel {
     log(resultPath);
     return resultPath;
   }
+
+  @override
+  Future<String> overlayAudios(String path1, String path2) async {
+    String resultPath = path1.substring(0, path1.lastIndexOf('.')) + '-merged.m4a';
+    String query = '-i $path1 -i $path2 -filter_complex amix=inputs=2:duration=longest $resultPath';
+
+    await FFmpegKit.execute(query).then(
+      (value) => value.getAllLogsAsString().then((logs) => log(logs ?? 'no logs!'))
+    );
+    return resultPath;
+  }
 }

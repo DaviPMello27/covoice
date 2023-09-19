@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:covoice/enums/voice_type.dart';
 import 'package:covoice/views/record/widgets/page_flag_button.dart';
+import 'package:covoice/views/record/widgets/voice_type_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -25,7 +27,7 @@ class MainPage extends StatefulWidget {
   final IPlayerController playerController;
   final IMusicController musicController;
   final IFFmpegController ffmpegController;
-  MainPage({required this.recordingController, required this.playerController, required this.musicController, required this.ffmpegController, Key? key}) : super(key: key);
+  const MainPage({required this.recordingController, required this.playerController, required this.musicController, required this.ffmpegController, Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -37,8 +39,11 @@ class _MainPageState extends State<MainPage> {
   String? lastNote;
   List<Note> noteList = [];
   DateTime? recordingStartTime;
-  final AudioPlayer _player = AudioPlayer();
   PlayerController waveFormController = PlayerController();
+  String? originalAudioPath;
+  String? transformedAudioPath;
+  String? joinedAudioPath;
+  VoiceType chosenVoiceType = VoiceType.both;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +74,6 @@ class _MainPageState extends State<MainPage> {
                             setState(() {
                               key = widget.musicController.getNotes()[index];
                             });
-                            print(key);
                           },
                           looping: true,
                           magnification: 1.22,
@@ -104,29 +108,97 @@ class _MainPageState extends State<MainPage> {
                         visible: !isRecording && noteList.isNotEmpty,
                       ),
                       Visibility(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
+                            children: [
+                              VoiceTypeButton(
+                                voiceType: VoiceType.primary,
+                                selected: chosenVoiceType == VoiceType.primary,
+                                onTap: () async {
+                                  setState(() {
+                                    chosenVoiceType = VoiceType.primary;
+                                  });
+
+                                  await waveFormController.stopPlayer();
+                                  await waveFormController.preparePlayer(
+                                    path: originalAudioPath!,
+                                    shouldExtractWaveform: true,
+                                    noOfSamples: 25,
+                                    volume: 1.0,
+                                  );
+                                },
+                              ),
+                              VoiceTypeButton(
+                                voiceType: VoiceType.both,
+                                selected: chosenVoiceType == VoiceType.both,
+                                onTap: () async {
+                                  setState(() {
+                                    chosenVoiceType = VoiceType.both;
+                                  });
+
+                                  await waveFormController.stopPlayer();
+                                  await waveFormController.preparePlayer(
+                                    path: joinedAudioPath!,
+                                    shouldExtractWaveform: true,
+                                    noOfSamples: 25,
+                                    volume: 1.0,
+                                  );
+                                },
+                              ),
+                              VoiceTypeButton(
+                                voiceType: VoiceType.secondary,
+                                selected: chosenVoiceType == VoiceType.secondary,
+                                onTap: () async {
+                                  setState(() {
+                                    chosenVoiceType = VoiceType.secondary;
+                                  });
+
+                                  await waveFormController.stopPlayer();
+                                  await waveFormController.preparePlayer(
+                                    path: transformedAudioPath!,
+                                    shouldExtractWaveform: true,
+                                    noOfSamples: 25,
+                                    volume: 1.0,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        visible: !isRecording && noteList.isNotEmpty,
+                      ),
+                      Visibility(
                         child: Text(lastNote ?? '', style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 48)),
                         visible: isRecording,
                       ),
                       Expanded(
                         child: Align(
                           alignment: Alignment.bottomLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              PageFlagButton(
-                                onPressed: (){},
-                                color: Theme.of(context).textTheme.subtitle1!.color!,
-                                iconColor: Theme.of(context).backgroundColor,
-                                icon: Icons.checklist,
-                              ),
-                              PageFlagButton(
-                                onPressed: (){},
-                                color: Theme.of(context).textTheme.subtitle1!.color!,
-                                iconColor: Theme.of(context).backgroundColor,
-                                icon: Icons.school,
-                                flip: true
-                              ),
-                            ]
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 60),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                PageFlagButton(
+                                  onPressed: (){
+                                    Navigator.of(context).pushNamed('/exercises');
+                                  },
+                                  color: Theme.of(context).textTheme.subtitle1!.color!,
+                                  iconColor: Theme.of(context).backgroundColor,
+                                  icon: Icons.checklist,
+                                ),
+                                PageFlagButton(
+                                  onPressed: (){
+                                    Navigator.of(context).pushNamed('/learn');
+                                  },
+                                  color: Theme.of(context).textTheme.subtitle1!.color!,
+                                  iconColor: Theme.of(context).backgroundColor,
+                                  icon: Icons.school,
+                                  flip: true
+                                ),
+                              ]
+                            ),
                           ),
                         )
                       ),
@@ -142,14 +214,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future stopRecording() async {
-    String? path = await widget.recordingController.stopRecordingStream();
-    waveFormController.preparePlayer(
-      path: path ?? '',
-      shouldExtractWaveform: true,
-      noOfSamples: 25,
-      volume: 1.0,
-    );
-    log(path ?? 'null');
+    originalAudioPath = await widget.recordingController.stopRecordingStream();
+    
     noteList.add(
       Note(
         note: lastNote,
@@ -172,10 +238,17 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       isRecording = false;
     });
-    if(path != null){
-      String newPath = await widget.ffmpegController.transformIntoHarmony(path, newNoteList, key);
-      widget.playerController.playAudiosTogether(newPath, path);
-      await _player.setAudioSource(AudioSource.file(newPath));
+
+    if(originalAudioPath != null){
+      transformedAudioPath = await widget.ffmpegController.transformIntoHarmony(originalAudioPath!, newNoteList, key);
+      joinedAudioPath = await widget.ffmpegController.overlayAudios(originalAudioPath!, transformedAudioPath!);
+
+      waveFormController.preparePlayer(
+        path: joinedAudioPath!,
+        shouldExtractWaveform: true,
+        noOfSamples: 25,
+        volume: 1.0,
+      );
     } 
   }
 

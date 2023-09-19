@@ -13,5 +13,10 @@ class FFmpegController implements IFFmpegController {
   Future<String> transformIntoHarmony(String path, List<Note> notes, String key) {
     return ffmpegModel.transformIntoHarmony(path, notes, key);
   }
+
+  @override
+  Future<String> overlayAudios(String path1, String path2){
+    return ffmpegModel.overlayAudios(path1, path2);
+  }
 }
 
