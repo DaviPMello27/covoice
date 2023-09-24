@@ -65,7 +65,7 @@ abstract class VoicifyTheme {
 
   static ThemeData get dark => ThemeData(
         primaryColor: Colors.blueGrey.shade900,
-        scaffoldBackgroundColor: Colors.blueGrey.shade800,
+        scaffoldBackgroundColor: Colors.blueGrey.shade900,
         backgroundColor: Colors.blueGrey.shade900,
         shadowColor: const Color.fromARGB(255, 44, 56, 59),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -98,6 +98,11 @@ abstract class VoicifyTheme {
             fontSize: 28,
             color: Color.fromARGB(255, 178, 215, 232),
           ),
+          headline3: const TextStyle(
+            fontSize: 38,
+            color: Color.fromARGB(255, 178, 215, 232),
+            fontWeight: FontWeight.bold,
+          )
         ),
       );
 }

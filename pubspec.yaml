@@ -44,6 +44,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   equatable: ^2.0.5
   audio_waveforms: ^1.0.4
+  flame: ^1.1.1
 
 dev_dependencies:
   flutter_test:

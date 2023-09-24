@@ -6,7 +6,7 @@ import 'package:covoice/model/ffmpeg_model.dart';
 import 'package:covoice/model/music_model.dart';
 import 'package:covoice/model/player_model.dart';
 import 'package:covoice/model/recording_model.dart';
-import 'package:covoice/views/exercises/exercises_list_page.dart';
+import 'package:covoice/views/exercises/exercise_modules_list_page.dart';
 import 'package:flutter/material.dart';
 import './record/page.dart';
 import './themes.dart';
@@ -27,8 +27,8 @@ class AppWidget extends StatelessWidget {
       initialRoute: '/record',
       routes: {
         '/record': (context) => home,
-        '/exercises': (context) => const ExercisesListPage(),
-        '/learn': (context) => const ExercisesListPage(), //TODO: change page
+        '/exercises': (context) => const ExerciseModulesListPage(),
+        '/learn': (context) => const ExerciseModulesListPage(), //TODO: change page
       },
       debugShowCheckedModeBanner: false,
       title: 'Covoice',

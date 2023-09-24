@@ -1,7 +1,11 @@
+import 'package:covoice/entities/exercise.dart';
+import 'package:covoice/views/exercises/exercise_page.dart';
 import 'package:flutter/material.dart';
 
 class ExercisesListPage  extends StatelessWidget {
-  const ExercisesListPage ({ Key? key }) : super(key: key);
+  final String moduleName;
+  final List<Exercise> exercises;
+  const ExercisesListPage ({ required this.moduleName, required this.exercises, Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,21 +15,64 @@ class ExercisesListPage  extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
+          children: Iterable<int>.generate(exercises.length).toList().map(
+            (i) => _ExerciseListTile(
+              number: i+1,
+              exercise: exercises[i],
+            )
+          ).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class _ExerciseListTile extends StatelessWidget {
+  final int number;
+  final Exercise exercise;
+
+  const _ExerciseListTile({ required this.number, required this.exercise, Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).textTheme.subtitle1!.color!, width: 0.5);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: ListTile(
+        shape: Border(top: verticalBorder, bottom: verticalBorder),
+        title: Text(
+          '$number. ${exercise.getTitle}',
+          style: const TextStyle(
+            fontSize: 18
+          )
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              title: const Text('Amateur'),
-              onTap: (){},
+            ...Iterable<int>.generate(5).map(
+              (n) => Icon(
+                Icons.star,
+                color: (n+1) <= exercise.getStars ? Colors.yellow : Theme.of(context).textTheme.subtitle1!.color!
+              )
             ),
-            ListTile(
-              title: const Text('Intermediary'),
-              onTap: (){},
-            ),
-            ListTile(
-              title: const Text('Professional'),
-              onTap: (){},
+            Icon(
+              Icons.chevron_right, 
+              color: Theme.of(context).textTheme.subtitle1!.color!
             ),
           ],
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExercisePage(
+                exercise: exercise,
+                number: number
+              ),
+            ),
+          );
+        },
       ),
     );
   }
