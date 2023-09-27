@@ -1,6 +1,8 @@
 import 'package:covoice/entities/exercise.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
+import 'package:covoice/views/exercises/game_interface.dart';
 import 'package:covoice/views/themes.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class ExercisePage  extends StatelessWidget {
@@ -19,16 +21,21 @@ class ExercisePage  extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
-            Text('Exercise $number', style: Theme.of(context).textTheme.headline3,),
+            Text(
+              'Exercise $number',
+              style: Theme.of(context).textTheme.headline3,
+            ),
             SizedBox(
               width: WidthProportion.of(context).half,
               child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
             ),
-            Text(exercise.getTitle, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: const Color.fromARGB(255, 178, 215, 232)),),
+            Text(exercise.getTitle, style: Theme.of(context).textTheme.subtitle1,),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Container(color: Colors.red,),
+                child: GameWidget(
+                  game: ExerciseGame()
+                ),
               ),
             ),
             Row(

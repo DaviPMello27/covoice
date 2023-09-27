@@ -184,7 +184,7 @@ class _MainPageState extends State<MainPage> {
                                   onPressed: (){
                                     Navigator.of(context).pushNamed('/exercises');
                                   },
-                                  color: Theme.of(context).textTheme.subtitle1!.color!,
+                                  color: Theme.of(context).colorScheme.secondaryVariant,
                                   iconColor: Theme.of(context).backgroundColor,
                                   icon: Icons.checklist,
                                 ),
@@ -192,7 +192,7 @@ class _MainPageState extends State<MainPage> {
                                   onPressed: (){
                                     Navigator.of(context).pushNamed('/learn');
                                   },
-                                  color: Theme.of(context).textTheme.subtitle1!.color!,
+                                  color: Theme.of(context).colorScheme.secondaryVariant,
                                   iconColor: Theme.of(context).backgroundColor,
                                   icon: Icons.school,
                                   flip: true

@@ -91,7 +91,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).textTheme.subtitle1!.color!, width: 0.5);
+    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5);
     Color medalColor = Colors.brown;    
     
     if(completionRate == 1){
@@ -108,7 +108,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         trailing: Icon(
           Icons.chevron_right, 
-          color: Theme.of(context).textTheme.subtitle1!.color!
+          color: Theme.of(context).colorScheme.secondary,
         ),
         title: Text(
           title,
@@ -127,7 +127,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
                 color: medalColor,
                 border: Border.all(
                   width: 1, 
-                  color: Colors.blueGrey.shade900
+                  color: Theme.of(context).colorScheme.background
                 ),
               ),
             ),

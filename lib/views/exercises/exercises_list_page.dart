@@ -53,7 +53,7 @@ class _ExerciseListTile extends StatelessWidget {
             ...Iterable<int>.generate(5).map(
               (n) => Icon(
                 Icons.star,
-                color: (n+1) <= exercise.getStars ? Colors.yellow : Theme.of(context).textTheme.subtitle1!.color!
+                color: (n+1) <= exercise.getStars ? Colors.yellow : Theme.of(context).colorScheme.secondaryVariant
               )
             ),
             Icon(

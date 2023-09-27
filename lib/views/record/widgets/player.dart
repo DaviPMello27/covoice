@@ -60,7 +60,7 @@ class PlayerState extends State<Player> {
       padding: const EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(500)), //TODO: 500? fix! get computed value or something
-        color: Theme.of(context).textTheme.subtitle1?.color,
+        color: Theme.of(context).colorScheme.secondaryVariant,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +78,7 @@ class PlayerState extends State<Player> {
                     ? Icons.replay 
                     : Icons.play_arrow_rounded,
                 size: 28,
-                color: Theme.of(context).textTheme.subtitle2!.color!,
+                color: Theme.of(context).colorScheme.secondary,
               )
             ),
           ),
@@ -88,9 +88,9 @@ class PlayerState extends State<Player> {
             enableSeekGesture: true,
             waveformType: WaveformType.fitWidth,
             playerWaveStyle: PlayerWaveStyle(
-                  fixedWaveColor: Theme.of(context).textTheme.subtitle2!.color!,
-                  liveWaveColor: Theme.of(context).shadowColor,
-                  spacing: 8,
+              fixedWaveColor: Theme.of(context).backgroundColor,
+              liveWaveColor: Theme.of(context).textTheme.subtitle2!.color!,
+              spacing: 8,
             ),
           ),
           Transform.scale(

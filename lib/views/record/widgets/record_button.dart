@@ -21,20 +21,21 @@ class _RecordButtonState extends State<RecordButton> {
 
   @override
   Widget build(BuildContext context) {
+    Color buttonColor = Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
+
+    Color darkerButtonColor = buttonColor
+      .withRed((buttonColor.red * 0.9).round())
+      .withGreen((buttonColor.green * 0.9).round())
+      .withBlue((buttonColor.blue * 0.9).round());
+
     return Padding(
       padding: EdgeInsets.only(top: WidthProportion.of(context).oneTenth),
       child: ElevatedButton(
         child: Ink(
           decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(colors: [
-                Theme.of(context)
-                    .elevatedButtonTheme
-                    .style!
-                    .backgroundColor!
-                    .resolve({})!,
-                Theme.of(context).buttonColor,
-              ])),
+            shape: BoxShape.circle,
+            gradient: RadialGradient(colors: [buttonColor,darkerButtonColor])
+          ),
           child: Padding(
             padding: EdgeInsets.all(WidthProportion.of(context).oneSixth),
             child: Icon(

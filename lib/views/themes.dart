@@ -30,6 +30,22 @@ class WidthProportion {
 }
 
 abstract class VoicifyTheme {
+  static const ColorScheme _darkColorScheme = ColorScheme(
+    primary: Color.fromARGB(255, 255, 179, 0),
+    primaryVariant: Color.fromARGB(255, 229, 161, 0),
+    secondary: Color.fromARGB(255, 178, 215, 232),
+    secondaryVariant: Color.fromARGB(255, 102, 123, 133),
+    surface: Color.fromARGB(255, 144, 164, 174),
+    background: Color.fromARGB(255, 38, 50, 56),
+    error: Color.fromARGB(255, 229, 57, 53),
+    onPrimary: Color.fromARGB(255, 0, 255, 0), //TODO: change
+    onSecondary: Color.fromARGB(255, 0, 255, 0), //TODO: change
+    onSurface: Color.fromARGB(255, 178, 215, 232),
+    onBackground: Color.fromARGB(255, 178, 215, 232),
+    onError: Color.fromARGB(255, 0, 0, 0), //TODO: change
+    brightness: Brightness.dark,
+  );
+
   static ThemeData get light => ThemeData(
         primaryColor: Colors.blueGrey.shade300,
         scaffoldBackgroundColor: Colors.blueGrey.shade50,
@@ -44,12 +60,13 @@ abstract class VoicifyTheme {
         buttonColor: Colors.red[400],
         appBarTheme: AppBarTheme(
           centerTitle: true,
-          backgroundColor: Colors.blueGrey.shade400,
-          titleTextStyle: const TextStyle(
+          backgroundColor: _darkColorScheme.error,
+          titleTextStyle: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: Colors.black54,
+            color: _darkColorScheme.secondary,
           ),
+          foregroundColor: _darkColorScheme.error,
         ),
         textTheme: TextTheme(
           subtitle1: TextStyle(
@@ -64,43 +81,43 @@ abstract class VoicifyTheme {
       );
 
   static ThemeData get dark => ThemeData(
-        primaryColor: Colors.blueGrey.shade900,
-        scaffoldBackgroundColor: Colors.blueGrey.shade900,
-        backgroundColor: Colors.blueGrey.shade900,
-        shadowColor: const Color.fromARGB(255, 44, 56, 59),
+        colorScheme: _darkColorScheme,
+        primaryColor: const Color.fromARGB(255, 144, 164, 174),
+        scaffoldBackgroundColor: _darkColorScheme.background,
+        backgroundColor: _darkColorScheme.background,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(const CircleBorder()),
-            backgroundColor: MaterialStateProperty.all(Colors.amber),
+            backgroundColor: MaterialStateProperty.all(_darkColorScheme.primary),
           ),
         ),
-        buttonColor: Colors.amber[600],
+        buttonColor: _darkColorScheme.primaryVariant,
         appBarTheme: AppBarTheme(
           centerTitle: true,
-          backgroundColor: Colors.blueGrey.shade900,
-          titleTextStyle: const TextStyle(
+          backgroundColor: _darkColorScheme.background,
+          titleTextStyle: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: Colors.white70,
+            color: _darkColorScheme.secondary,
           ),
         ),
         textTheme: TextTheme(
           subtitle1: TextStyle(
-            color: Colors.blueGrey.shade400,
+            color: _darkColorScheme.secondary,
             fontSize: 14,
           ),
-          subtitle2: const TextStyle(
-            color: Color.fromARGB(255, 178, 215, 232),
+          subtitle2: TextStyle(
+            color: _darkColorScheme.secondary,
             fontSize: 12,
           ),
-          bodyText1: const TextStyle(
+          bodyText1: TextStyle(
             fontSize: 28,
-            color: Color.fromARGB(255, 178, 215, 232),
+            color: _darkColorScheme.secondary,
           ),
-          headline3: const TextStyle(
+          headline3: TextStyle(
             fontSize: 38,
-            color: Color.fromARGB(255, 178, 215, 232),
+            color: _darkColorScheme.secondary,
             fontWeight: FontWeight.bold,
           )
         ),

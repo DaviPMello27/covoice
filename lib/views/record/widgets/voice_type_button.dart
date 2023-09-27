@@ -10,8 +10,8 @@ class VoiceTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = selected ? Theme.of(context).textTheme.subtitle2!.color! : Theme.of(context).textTheme.subtitle1!.color!;
-    Color foregroundColor = selected ? Theme.of(context).textTheme.subtitle1!.color! : Theme.of(context).primaryColor;
+    Color backgroundColor = selected ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.secondaryVariant;
+    Color foregroundColor = selected ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.secondary;
     
     
     return Flexible(

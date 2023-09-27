@@ -42,13 +42,13 @@ class FlagPainter extends CustomPainter {
 }
 
 class PageFlagButton extends StatelessWidget {
-  void Function() onPressed;
-  bool flip;
-  Color color;
-  Color iconColor;
-  IconData icon;
+  final void Function() onPressed;
+  final bool flip;
+  final Color color;
+  final Color iconColor;
+  final IconData icon;
 
-  PageFlagButton({ Key? key, required this.onPressed, required this.color, required this.iconColor, required this.icon, this.flip = false }) : super(key: key);
+  const PageFlagButton({ Key? key, required this.onPressed, required this.color, required this.iconColor, required this.icon, this.flip = false }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
