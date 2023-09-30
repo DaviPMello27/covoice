@@ -38,7 +38,7 @@ abstract class VoicifyTheme {
     surface: Color.fromARGB(255, 19, 23, 26),
     background: Color.fromARGB(255, 38, 50, 56),
     error: Color.fromARGB(255, 96, 114, 128),
-    onPrimary: Color.fromARGB(255, 255, 255, 255),
+    onPrimary: Color.fromARGB(255, 180, 180, 180),
     onSecondary: Color.fromARGB(255, 255, 255, 255),
     onSurface: Color.fromARGB(255, 178, 215, 232),
     onBackground: Color.fromARGB(255, 178, 215, 232),

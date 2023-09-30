@@ -25,7 +25,7 @@ class ExerciseGame extends FlameGame {
     );
 
     add(TargetLine(context: context));
-    add(Boundary(context: context));
+    add(Boundary(context: context)..priority = 5);
 
   }
 

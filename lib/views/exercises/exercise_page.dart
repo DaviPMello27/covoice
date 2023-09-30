@@ -46,8 +46,10 @@ class _ExercisePageState extends State<ExercisePage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: GameWidget(
-                  game: ExerciseGame(note: sangNote, context: context)
+                child: ClipRect(
+                  child: GameWidget(
+                    game: ExerciseGame(note: sangNote, context: context)
+                  ),
                 ),
               ),
             ),
