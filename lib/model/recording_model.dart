@@ -83,22 +83,8 @@ class RecordingModel implements IRecordingModel {
   }
 
   @override
-  List<String> getKeys() {
+  List<String> getKeys() { //move somewhere
     return ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
   }
   
 }
-
-/*
-0 - tolerance: Error tolerance (HZ)
-1 - frequency: Detected frequency (HZ)
-2 - note: Detected note (String)
-3 - target: Target note (HZ. Frequency of the note that is closest to this note in the target tuning. If there's no target tuning, this frequency will be the one that's closest to the note detected)
-4 - distance: Absolute distance between detected and target note (HZ)
-5 - octave: Detected note's octave (Integer)
-6 - nearestNote: Note that is the closest to the current detected note (String)
-7 - nearestTarget: Frequency of the note that is the closest to the current detected note (HZ. It seems that this will only differ from the original target if there's no current tuning target)
-8 - nearestDistance: Absolute distance between detected note and the nearest note (HZ)
-9 - nearestOctave: Octave of the note that is the closest to the current detected note (Integer)
-10 - isOnPitch: Whether it is considered on pitch (Boolean. If the current detected frequency is within tolerance of the nearest target note's frequency)
-*/

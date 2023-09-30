@@ -89,7 +89,7 @@ class PlayerState extends State<Player> {
             waveformType: WaveformType.fitWidth,
             playerWaveStyle: PlayerWaveStyle(
               fixedWaveColor: Theme.of(context).backgroundColor,
-              liveWaveColor: Theme.of(context).textTheme.subtitle2!.color!,
+              liveWaveColor: Theme.of(context).colorScheme.secondaryVariant,
               spacing: 8,
             ),
           ),
@@ -101,7 +101,7 @@ class PlayerState extends State<Player> {
               icon: Icon(
                 Icons.share,
                 size: 20,
-                color: Theme.of(context).textTheme.subtitle2!.color!,
+                color: Theme.of(context).colorScheme.secondaryVariant,
               )
             ),
           ),

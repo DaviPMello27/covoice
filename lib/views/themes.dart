@@ -35,14 +35,14 @@ abstract class VoicifyTheme {
     primaryVariant: Color.fromARGB(255, 229, 161, 0),
     secondary: Color.fromARGB(255, 178, 215, 232),
     secondaryVariant: Color.fromARGB(255, 102, 123, 133),
-    surface: Color.fromARGB(255, 144, 164, 174),
+    surface: Color.fromARGB(255, 19, 23, 26),
     background: Color.fromARGB(255, 38, 50, 56),
-    error: Color.fromARGB(255, 229, 57, 53),
-    onPrimary: Color.fromARGB(255, 0, 255, 0), //TODO: change
-    onSecondary: Color.fromARGB(255, 0, 255, 0), //TODO: change
+    error: Color.fromARGB(255, 96, 114, 128),
+    onPrimary: Color.fromARGB(255, 255, 255, 255),
+    onSecondary: Color.fromARGB(255, 255, 255, 255),
     onSurface: Color.fromARGB(255, 178, 215, 232),
     onBackground: Color.fromARGB(255, 178, 215, 232),
-    onError: Color.fromARGB(255, 0, 0, 0), //TODO: change
+    onError: Color.fromARGB(255, 255, 255, 255),
     brightness: Brightness.dark,
   );
 
@@ -108,7 +108,7 @@ abstract class VoicifyTheme {
             fontSize: 14,
           ),
           subtitle2: TextStyle(
-            color: _darkColorScheme.secondary,
+            color: _darkColorScheme.onSecondary,
             fontSize: 12,
           ),
           bodyText1: TextStyle(

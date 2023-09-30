@@ -1,5 +1,7 @@
 import 'dart:ffi';
 
+//TODO: remove getters and setters
+
 class Note {
   late String? _note;
   late double _time;
@@ -13,19 +15,19 @@ class Note {
 
   String? get getNote => _note;
 
-  set setNote(String? note){
+  set note(String? note){
     _note = note;
   }
 
   double get getTime => _time;
 
-  set setTime(double time){
+  set time(double time){
     _time = time;
   }
 
   double? get getFrequency => _frequency;
 
-  set setFrequency(double? frequency){
+  set frequency(double? frequency){
     _frequency = frequency;
   }
 }

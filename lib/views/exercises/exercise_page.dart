@@ -1,15 +1,28 @@
+import 'package:covoice/controller/recording_controller.dart';
 import 'package:covoice/entities/exercise.dart';
+import 'package:covoice/entities/note.dart';
+import 'package:covoice/model/recording_model.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
-import 'package:covoice/views/exercises/game_interface.dart';
+import 'package:covoice/views/exercises/game/exercise_game.dart';
 import 'package:covoice/views/themes.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class ExercisePage  extends StatelessWidget {
+class ExercisePage extends StatefulWidget {
   final int number;
   final Exercise exercise;
 
   const ExercisePage ({ required this.exercise, required this.number, Key? key }) : super(key: key);
+
+  @override
+  State<ExercisePage> createState() => _ExercisePageState();
+}
+
+class _ExercisePageState extends State<ExercisePage> {
+  Note sangNote = Note(time: 0);
+  bool recording = false;
+
+  final RecordingController recordingController = RecordingController(RecordingModel());
 
   @override
   Widget build(BuildContext context) {
@@ -22,32 +35,51 @@ class ExercisePage  extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Exercise $number',
+              'Exercise ${widget.number}',
               style: Theme.of(context).textTheme.headline3,
             ),
             SizedBox(
               width: WidthProportion.of(context).half,
               child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
             ),
-            Text(exercise.getTitle, style: Theme.of(context).textTheme.subtitle1,),
+            Text(widget.exercise.getTitle, style: Theme.of(context).textTheme.subtitle1,),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: GameWidget(
-                  game: ExerciseGame()
+                  game: ExerciseGame(note: sangNote, context: context)
                 ),
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Transform.scale(
                   scale: 2,
                   child: IconButton(
-                    onPressed: (){},
-                    icon: const Icon(
-                      Icons.mic,
-                      color: Color.fromARGB(255, 178, 215, 232),
+                    onPressed: (){
+                      if(!recording){
+                        recordingController.startRecordingStream(
+                          (frequency){
+                            if(frequency != -1.0 && frequency > 100 && frequency < 800){
+                              sangNote.frequency = frequency;
+                            }
+                          },
+                          (amp){
+                            /* log("Amp $amp"); */
+                          }
+                        );
+                      } else {
+                        recordingController.stopRecordingStream();
+                      }
+
+                      setState(() {
+                        recording = !recording;
+                      });
+                    },
+                    icon: Icon(
+                      recording ? Icons.stop : Icons.mic,
+                      color: const Color.fromARGB(255, 178, 215, 232),
                     )
                   ),
                 ),
@@ -68,49 +100,6 @@ class ExercisePage  extends StatelessWidget {
       )
     );
   }
-
-  /*
-  Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text('Exercise $number', style: Theme.of(context).textTheme.headline3,),
-          SizedBox(
-            width: WidthProportion.of(context).half,
-            child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
-          ),
-          Text(exercise.getTitle, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: const Color.fromARGB(255, 178, 215, 232)),),
-          //SizedBox.expand(child: Container(color: Colors.red)),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Transform.scale(
-                  scale: 2,
-                  child: IconButton(
-                    onPressed: (){},
-                    icon: const Icon(
-                      Icons.mic,
-                      color: Color.fromARGB(255, 178, 215, 232),
-                    )
-                  ),
-                ),
-                Transform.scale(
-                  scale: 2,
-                  child: IconButton(
-                    onPressed: (){},
-                    icon: const Icon(
-                      Icons.play_arrow,
-                      color: Color.fromARGB(255, 178, 215, 232),
-                    )
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-  */
 }
 
 class _ExerciseModuleListTile extends StatelessWidget {
