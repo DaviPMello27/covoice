@@ -85,7 +85,7 @@ class _MainPageState extends State<MainPage> {
                           children: widget.musicController.getNotes().map(
                             (note) => Text(
                               note,
-                              style: Theme.of(context).textTheme.bodyText1,
+                              style: Theme.of(context).textTheme.bodyText1, //TODO: review "bodyText1"
                             )
                           ).toList()
                         ),

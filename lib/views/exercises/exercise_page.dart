@@ -123,7 +123,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).textTheme.subtitle1!.color!, width: 0.5);
+    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).colorScheme.secondaryVariant, width: 0.5);
     Color medalColor = Colors.brown;    
     
     if(completionRate == 1){

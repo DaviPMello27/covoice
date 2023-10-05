@@ -7,7 +7,7 @@ import 'package:covoice/model/music_model.dart';
 import 'package:covoice/model/player_model.dart';
 import 'package:covoice/model/recording_model.dart';
 import 'package:covoice/views/exercises/exercise_modules_list_page.dart';
-import 'package:covoice/views/lerning_modules/learning_modules_list_page.dart';
+import 'package:covoice/views/lerning/learning_modules_list_page.dart';
 import 'package:flutter/material.dart';
 import './record/page.dart';
 import './themes.dart';

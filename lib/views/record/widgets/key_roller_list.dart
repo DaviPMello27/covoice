@@ -47,7 +47,7 @@ class _KeyRollerListState extends State<KeyRollerList> {
               (note) => Center(
                 child: Text(
                   note,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyText1, //TODO: review "bodyText1"
                 ),
               ),
             )

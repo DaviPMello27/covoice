@@ -70,7 +70,7 @@ class PlayerState extends State<Player> {
             scale: 2,
             child: IconButton(
               onPressed: togglePlayPause,
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.only(right: 10),
               icon: Icon(
                 isPlaying 
                   ? Icons.pause
@@ -82,26 +82,35 @@ class PlayerState extends State<Player> {
               )
             ),
           ),
-          AudioFileWaveforms(
-            size: Size(MediaQuery.of(context).size.width / 2.5, 80.0),
-            playerController: widget.controller,
-            enableSeekGesture: true,
-            waveformType: WaveformType.fitWidth,
-            playerWaveStyle: PlayerWaveStyle(
-              fixedWaveColor: Theme.of(context).backgroundColor,
-              liveWaveColor: Theme.of(context).colorScheme.secondaryVariant,
-              spacing: 8,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: AudioFileWaveforms(
+                size: Size(MediaQuery.of(context).size.width / 2.5, 60.0),
+                playerController: widget.controller,
+                enableSeekGesture: true,
+                waveformType: WaveformType.long,
+                playerWaveStyle: PlayerWaveStyle(
+                  fixedWaveColor: Theme.of(context).colorScheme.secondaryVariant,
+                  liveWaveColor: Theme.of(context).colorScheme.secondary,
+                  spacing: 8,
+                ),
+              ),
             ),
           ),
           Transform.scale(
             scale: 2,
             child: IconButton(
               onPressed: (){},
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.only(left: 10),
               icon: Icon(
                 Icons.share,
                 size: 20,
-                color: Theme.of(context).colorScheme.secondaryVariant,
+                color: Theme.of(context).colorScheme.secondary,
               )
             ),
           ),

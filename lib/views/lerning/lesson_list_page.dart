@@ -1,9 +1,11 @@
-import 'package:covoice/views/lerning_modules/lesson_list_page.dart';
+import 'package:covoice/entities/lesson.dart';
+import 'package:covoice/views/lerning/lesson_page.dart';
 import 'package:flutter/material.dart';
 
-class LearningModulesListPage extends StatelessWidget {
-  final List<String> modules = const ['Theory 1: The fundamentals', 'Theory 2: Harmony'];
-  const LearningModulesListPage({ Key? key }) : super(key: key);
+class LessonListPage extends StatelessWidget {
+  final Lesson module;
+
+  const LessonListPage({required this.module, Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,23 +15,24 @@ class LearningModulesListPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: Iterable<int>.generate(modules.length).toList().map(
-            (i) => _ModuleListTile(
-              number: i+1,
-              title: modules[i],
-            )
-          ).toList(),
+          children: module.childLessons
+            .map(
+              (lesson) => _LessonListTile(
+                module: module,
+                lesson: lesson,
+              )
+            ).toList(),
         ),
       ),
     );
   }
 }
 
-class _ModuleListTile extends StatelessWidget {
-  final int number;
-  final String title;
+class _LessonListTile extends StatelessWidget {
+  final Lesson module;
+  final Lesson lesson;
 
-  const _ModuleListTile({ required this.number, required this.title, Key? key }) : super(key: key);
+  const _LessonListTile({ required this.module, required this.lesson, Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +43,14 @@ class _ModuleListTile extends StatelessWidget {
       child: ListTile(
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         title: Text(
-          '$number. $title',
+          lesson.title,
           style: const TextStyle(
             fontSize: 18
           )
+        ),
+        leading: Icon(
+          Icons.check_circle,
+          color: lesson.completed ? Colors.green.shade300 : Theme.of(context).colorScheme.secondaryVariant,
         ),
         trailing: Icon(
           Icons.chevron_right, 
@@ -53,8 +60,9 @@ class _ModuleListTile extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LessonListPage(
-                module: title,
+              builder: (context) => LessonPage(
+                module: module,
+                lesson: lesson,
               ),
             ),
           );

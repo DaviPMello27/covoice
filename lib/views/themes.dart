@@ -111,14 +111,34 @@ abstract class VoicifyTheme {
             color: _darkColorScheme.onSecondary,
             fontSize: 12,
           ),
+          caption: TextStyle(
+            color: _darkColorScheme.secondary,
+            fontSize: 12,
+          ),
           bodyText1: TextStyle(
             fontSize: 28,
+            color: _darkColorScheme.secondary,
+          ),
+          bodyText2: TextStyle(
+            fontSize: 16,
             color: _darkColorScheme.secondary,
           ),
           headline3: TextStyle(
             fontSize: 38,
             color: _darkColorScheme.secondary,
             fontWeight: FontWeight.bold,
+          )
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(_darkColorScheme.secondaryVariant),
+            foregroundColor: MaterialStateProperty.all(_darkColorScheme.background),
+            textStyle: MaterialStateProperty.all(
+              const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              )
+            )
           )
         ),
       );
