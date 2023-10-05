@@ -42,7 +42,10 @@ class _ExercisePageState extends State<ExercisePage> {
               width: WidthProportion.of(context).half,
               child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
             ),
-            Text(widget.exercise.getTitle, style: Theme.of(context).textTheme.subtitle1,),
+            Text(
+              widget.exercise.getTitle,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -140,7 +143,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         trailing: Icon(
           Icons.chevron_right, 
-          color: Theme.of(context).textTheme.subtitle1!.color!
+          color: Theme.of(context).colorScheme.secondaryVariant,
         ),
         title: Text(
           title,

@@ -19,7 +19,7 @@ class _KeyRollerListState extends State<KeyRollerList> {
       shaderCallback: (rect) => LinearGradient(
         colors: [
           Theme.of(context).backgroundColor,
-          Theme.of(context).textTheme.subtitle1!.color!,
+          Theme.of(context).colorScheme.secondary,
           Theme.of(context).backgroundColor,
         ],
         begin: Alignment.topCenter,

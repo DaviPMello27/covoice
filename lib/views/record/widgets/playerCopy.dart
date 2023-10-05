@@ -64,19 +64,19 @@ class ControlButtons extends StatelessWidget {
               );
             } else if (playing != true) {
               return IconButton(
-                icon: Icon(Icons.play_arrow, color: Theme.of(context).textTheme.subtitle1?.color),
+                icon: Icon(Icons.play_arrow, color: Theme.of(context).colorScheme.secondary),
                 iconSize: 48.0,
                 onPressed: player.play,
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: Icon(Icons.pause, color: Theme.of(context).textTheme.subtitle1?.color),
+                icon: Icon(Icons.pause, color: Theme.of(context).colorScheme.secondary),
                 iconSize: 48.0,
                 onPressed: player.pause,
               );
             } else {
               return IconButton(
-                icon: Icon(Icons.replay, color: Theme.of(context).textTheme.subtitle1?.color),
+                icon: Icon(Icons.replay, color: Theme.of(context).colorScheme.secondary),
                 iconSize: 48.0,
                 onPressed: () => player.seek(Duration.zero),
               );

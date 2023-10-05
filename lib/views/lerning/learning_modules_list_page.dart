@@ -29,7 +29,7 @@ class _ModuleListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).textTheme.subtitle1!.color!, width: 0.5);
+    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5);
 
     return Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -43,7 +43,7 @@ class _ModuleListTile extends StatelessWidget {
         ),
         trailing: Icon(
           Icons.chevron_right, 
-          color: Theme.of(context).textTheme.subtitle1!.color!
+          color: Theme.of(context).colorScheme.secondary
         ),
         onTap: () {
           Navigator.push(
