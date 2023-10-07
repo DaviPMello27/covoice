@@ -36,9 +36,9 @@ class NoteIndicator extends RectangleComponent with HasGameRef {
     String start = string.substring(string.indexOf('[') + 1, string.indexOf('-'));
     String end = string.substring(string.indexOf('-') + 1, string.indexOf(']'));
 
-    double positionX = (double.parse(start) / 5) - state.timeElapsed;
+    double positionX = 100 + (double.parse(start) / 10) - state.timeElapsed; //TODO: Study "100 +"
     double positionY = 35.0 + (30.0 * noteList.indexOf(note));
-    double width = (double.parse(end) / 5) - (double.parse(start) / 5);
+    double width = (double.parse(end) / 10) - (double.parse(start) / 10);
     
 
     return NoteIndicator(
