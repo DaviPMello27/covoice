@@ -16,54 +16,15 @@ class ExerciseModulesListPage  extends StatelessWidget {
           children: [
             _ExerciseModuleListTile(
               title: 'Amateur',
-              exercises: [
-                Exercise(
-                  stars: 5,
-                  title: 'Single note test: A',
-                ),
-                Exercise(
-                  stars: 5,
-                  title: 'Simple melody test',
-                ),
-                Exercise(
-                  stars: 4,
-                  title: 'Musical scale test: Scale of D',
-                ),
-              ]
+              exercises: Exercise.covoiceExercises.where((e) => e.getModule == 'amateur').toList()
             ),
             _ExerciseModuleListTile(
               title: 'Intermediary',
-              exercises: [
-                Exercise(
-                  stars: 3,
-                  title: 'Happy Birthday to You',
-                ),
-                Exercise(
-                  stars: 4,
-                  title: 'Jingle Bells',
-                ),
-                Exercise(
-                  stars: 2,
-                  title: 'O Holy Night',
-                ),
-              ]
+              exercises: Exercise.covoiceExercises.where((e) => e.getModule == 'intermediary').toList()
             ),
             _ExerciseModuleListTile(
               title: 'Professional',
-              exercises: [
-                Exercise(
-                  stars: 2,
-                  title: 'Song 1',
-                ),
-                Exercise(
-                  stars: 1,
-                  title: 'Song 2',
-                ),
-                Exercise(
-                  stars: 1,
-                  title: 'Song 3',
-                ),
-              ]
+              exercises: Exercise.covoiceExercises.where((e) => e.getModule == 'professional').toList()
             ),
           ],
         ),

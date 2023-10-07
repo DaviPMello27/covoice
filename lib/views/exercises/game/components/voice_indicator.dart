@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:covoice/entities/note.dart';
+import 'package:covoice/views/exercises/game/exercise_game_state.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class VoiceIndicator extends PositionComponent with HasGameRef {
-  BuildContext context;
+  ExerciseGameState state;
   Note note;
-  VoiceIndicator({required this.note, required this.context}) : super();
+  VoiceIndicator({required this.note, required this.state}) : super();
 
   @override
   Future<void>? onLoad() {
-    Color trueVoiceIndicatorColor = Theme.of(context).colorScheme.onSecondary;
+    Color trueVoiceIndicatorColor = Theme.of(state.context).colorScheme.onSecondary;
     Color oneOctaveVoiceIndicatorColor = trueVoiceIndicatorColor
       .withRed((trueVoiceIndicatorColor.red * 0.6).round())
       .withGreen((trueVoiceIndicatorColor.green * 0.6).round())
@@ -75,6 +76,9 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
     if((note.getFrequency ?? 0) > 0){
       double positionY = gameRef.size.y - ((logBase(note.getFrequency!, 2) * 360) - 2660);
       position.y = positionY;
+
+      List<String> noteList = ['A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4', 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3'];
+      
     }
     super.update(dt);
   } 

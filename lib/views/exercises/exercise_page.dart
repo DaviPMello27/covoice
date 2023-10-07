@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:covoice/controller/recording_controller.dart';
 import 'package:covoice/entities/exercise.dart';
 import 'package:covoice/entities/note.dart';
 import 'package:covoice/model/recording_model.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
 import 'package:covoice/views/exercises/game/exercise_game.dart';
+import 'package:covoice/views/exercises/game/exercise_game_state.dart';
 import 'package:covoice/views/themes.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ExercisePage extends StatefulWidget {
   final int number;
@@ -20,9 +24,28 @@ class ExercisePage extends StatefulWidget {
 
 class _ExercisePageState extends State<ExercisePage> {
   Note sangNote = Note(time: 0);
+  bool loaded = false;
   bool recording = false;
+  bool playing = false;
+  List<String> noteStrings = []; //TODO: Convert right here to a note of some kind and stop working with strings
 
   final RecordingController recordingController = RecordingController(RecordingModel());
+
+  Future loadExerciseNoteStrings() async {
+    String exercisePath = widget.exercise.getFullPath;
+    String fileString = await rootBundle.loadString('$exercisePath/notes');
+    noteStrings = LineSplitter.split(fileString).toList();
+    
+    setState(() {
+      loaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    loadExerciseNoteStrings();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +53,7 @@ class _ExercisePageState extends State<ExercisePage> {
       appBar: AppBar(
         title: const Text('Exercise'),
       ),
-      body: Padding(
+      body: loaded ? Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
@@ -51,7 +74,16 @@ class _ExercisePageState extends State<ExercisePage> {
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: ClipRect(
                   child: GameWidget(
-                    game: ExerciseGame(note: sangNote, context: context)
+                    game: ExerciseGame(
+                      state: ExerciseGameState(
+                        note: sangNote,
+                        exercise: widget.exercise,
+                        context: context,
+                        noteStrings: noteStrings,
+                        playing: playing,
+                        recording: recording,
+                      )
+                    )
                   ),
                 ),
               ),
@@ -102,7 +134,7 @@ class _ExercisePageState extends State<ExercisePage> {
             ),
           ],
         ),
-      )
+      ) : const Center(child: CircularProgressIndicator(),)
     );
   }
 }

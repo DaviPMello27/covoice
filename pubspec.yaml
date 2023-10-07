@@ -34,6 +34,7 @@ dependencies:
   flutter_sound: ^9.2.13
   record: ^4.4.4
   just_audio: ^0.9.32
+  flame_audio: 1.0.0
   flutter_audio_capture: ^1.1.4
   flutter_bloc: ^8.1.2
   ffmpeg_kit_flutter: ^5.1.0
@@ -79,6 +80,10 @@ flutter:
     - assets/lessons/module_2/chords/
     - assets/lessons/module_2/vocal_harmony_the_basics/
     - assets/lessons/module_2/vocal_harmony_advanced/
+
+    - assets/exercises/amateur/single_note_test_a/
+    - assets/exercises/amateur/scale_of_g/
+    - assets/exercises/amateur/simple_melody_test/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
