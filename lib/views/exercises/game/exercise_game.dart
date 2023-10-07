@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 class ExerciseGame extends FlameGame {
   ExerciseGameState state;
+  bool canStopLooping = false;
+
 
   ExerciseGame({required this.state}) : super();
 
@@ -17,9 +19,9 @@ class ExerciseGame extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    if(state.playing || state.recording){ //TODO: Audio
+    if(state.playing || state.recording){ //Maybe you'll have to move this if you manage to make the canvas not rerender
       FlameAudio.audioCache.prefix = '';
-      FlameAudio.playLongAudio('${state.exercise.getFullPath}/audio.mp3');
+      FlameAudio.bgm.play('${state.exercise.getFullPath}/audio.mp3');
     }
 
     add(
@@ -42,12 +44,30 @@ class ExerciseGame extends FlameGame {
 
   @override
   void update(double dt) {
+    if(state.timeElapsedInMilliseconds > 0){
+      canStopLooping = true;
+    }
+
+    if(state.timeElapsedInMilliseconds == 0 && canStopLooping){
+      canStopLooping = false;
+      state.recording = false;
+      state.playing = false;
+      //this.onEnd();
+    }
 
     if(state.recording || state.playing){
-      state.timeElapsed += dt;
+      FlameAudio.bgm.audioPlayer?.getCurrentPosition().then(
+          (currentPos) {
+            state.timeElapsedInMilliseconds = currentPos;
+          }
+        );
     } else {
-      state.timeElapsed = 0;
+      state.timeElapsedInMilliseconds = 0;
+      if(FlameAudio.bgm.isPlaying){
+        FlameAudio.bgm.stop();
+      }
     }
+
     super.update(dt);
   }
 }

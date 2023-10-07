@@ -62,7 +62,7 @@ class RecordingModel implements IRecordingModel {
         var buffer = Float64List.fromList(obj.cast<double>());
         final List<double> audioSample = buffer.toList();
         PitchDetectorResult result = pitchDetector.getPitch(audioSample);
-        print('note: ${musicModel.getNearestNote(result.pitch)}, timestamp: ${DateTime.now().difference(startTime).inMilliseconds}, frequency: ${result.pitch}, probability: ${result.probability}');
+        //print('note: ${musicModel.getNearestNote(result.pitch)}, timestamp: ${DateTime.now().difference(startTime).inMilliseconds}, frequency: ${result.pitch}, probability: ${result.probability}');
         if(result.probability < 0.8){
           return -1.0;
         } 

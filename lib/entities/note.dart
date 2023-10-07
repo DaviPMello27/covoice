@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 //TODO: remove getters and setters
 
 class Note {

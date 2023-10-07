@@ -9,7 +9,7 @@ class ExerciseGameState {
   List<String> noteStrings;
   bool playing;
   bool recording;
-  double timeElapsed = 0.0;
+  int timeElapsedInMilliseconds = 0;
   int score = 0;
 
   ExerciseGameState({

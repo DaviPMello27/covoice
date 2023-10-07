@@ -1,21 +1,4 @@
-import 'dart:developer';
-
-import 'package:flutter_fft/flutter_fft.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:record/record.dart';
-
 import 'music_model_inteface.dart';
-import 'player_model_inteface.dart';
-import 'recording_model_interface.dart';
-import 'package:just_audio/just_audio.dart';
-
-/*
-Alternative:
-flutter_audio_capture (https://pub.dev/packages/flutter_audio_capture/example)
-         +
-pitch_detector_dart (https://pub.dev/packages/pitch_detector_dart)
-https://techpotatoes.com/2021/07/27/implementing-a-guitar-tuner-app-in-dart-flutter/
-*/
 
 class MusicModel implements IMusicModel {
   static const List<String> notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']; //move somewhere
@@ -31,6 +14,7 @@ class MusicModel implements IMusicModel {
     return getNotes().indexOf(note);
   }
 
+  //TODO: change method name
   void setKey(String key){
     _frequenciesInKey = [];
     int firstTonic = notes.indexOf(key);

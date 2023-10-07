@@ -14,7 +14,6 @@ class FFmpegModel implements IFFmpegModel {
   @override
   Future<String> transformIntoHarmony(String path, List<Note> notes, String key) async {
     int ffmpegVariable = 0;
-    int currentTime = 0;
     String resultPath = path.substring(0, path.lastIndexOf('.')) + '-transformed.m4a';
     String ffmpegQuery = '-i $path -filter_complex "';
     notes.asMap().forEach((index, note) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WidthProportion {
+  late double full;
   late double oneThird;
   late double half;
   late double oneFourth;
@@ -9,6 +10,7 @@ class WidthProportion {
   late double oneTenth;
 
   WidthProportion({
+    required this.full,
     required this.half,
     required this.oneThird,
     required this.oneFourth,
@@ -19,6 +21,7 @@ class WidthProportion {
 
   factory WidthProportion.of(BuildContext context) {
     return WidthProportion(
+      full: MediaQuery.of(context).size.width,
       half: MediaQuery.of(context).size.width / 2,
       oneThird: MediaQuery.of(context).size.width / 3,
       oneFourth: MediaQuery.of(context).size.width / 4,
