@@ -38,22 +38,6 @@ class MusicModel implements IMusicModel {
     return notes;
   }
 
-  @override
-  @deprecated
-  String getCorrectedNote(String note) {
-    return _getNoteSafe((_getNoteIndex(note) + 1));
-  }
-
-  @override
-  String getMajorThird(String note) {
-    return _getNoteSafe(_getNoteIndex(getCorrectedNote(note)) + 4);
-  }
-
-  @override
-  String getMinorThird(String note) {
-    return _getNoteSafe(_getNoteIndex(getCorrectedNote(note)) + 3);
-  }
-
   String correctBasedOnKey(String note, String key){
     int keyIndex = _getNoteIndex(key);
     List<String> acceptables = [

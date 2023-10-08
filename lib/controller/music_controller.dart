@@ -13,21 +13,6 @@ class MusicController implements IMusicController {
   }
 
   @override
-  String getCorrectedNote(String note) {
-    return musicModel.getCorrectedNote(note);
-  }
-
-  @override
-  String getMajorThird(String note) {
-    return musicModel.getMajorThird(note);
-  }
-
-  @override
-  String getMinorThird(String note) {
-    return musicModel.getMinorThird(note);
-  }
-
-  @override
   List<double> getFrequencies() {
     return musicModel.getFrequencies();
   }

@@ -1,8 +1,5 @@
 abstract class IMusicModel {
   List<String> getNotes();
-  String getCorrectedNote(String note);
-  String getMajorThird(String note);
-  String getMinorThird(String note);
   bool isMajor(String note, String key);
 
   List<double> getFrequencies();
