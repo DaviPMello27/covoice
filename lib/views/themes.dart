@@ -134,7 +134,7 @@ abstract class VoicifyTheme {
         ),
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(_darkColorScheme.secondaryVariant),
+            backgroundColor: MaterialStateProperty.all(_darkColorScheme.secondary),
             foregroundColor: MaterialStateProperty.all(_darkColorScheme.background),
             textStyle: MaterialStateProperty.all(
               const TextStyle(

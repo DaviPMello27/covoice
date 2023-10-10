@@ -1,3 +1,4 @@
+import 'package:covoice/entities/game_note.dart';
 import 'package:covoice/views/exercises/game/components/boundary.dart';
 import 'package:covoice/views/exercises/game/components/note_indicator.dart';
 import 'package:covoice/views/exercises/game/components/target_line.dart';
@@ -11,9 +12,10 @@ import 'package:flutter/material.dart';
 class ExerciseGame extends FlameGame {
   ExerciseGameState state;
   bool canStopLooping = false;
+  void Function() onEnd;
 
 
-  ExerciseGame({required this.state}) : super();
+  ExerciseGame({required this.state, required this.onEnd}) : super();
 
   @override
   Future<void> onLoad() async {
@@ -36,23 +38,23 @@ class ExerciseGame extends FlameGame {
     add(Boundary(context: state.context)..priority = 5);
     add(VoiceIndicator(state: state, note: state.note));
 
-    for(String noteString in state.noteStrings){
-      add(NoteIndicator.fromNoteString(noteString, state));
+    for(GameNote note in state.notes){
+      add(NoteIndicator.fromGameNote(note, state));
     }
 
   }
 
   @override
   void update(double dt) {
-    if(state.timeElapsedInMilliseconds > 0){
+    if(state.timeElapsedInMilliseconds > 100){
       canStopLooping = true;
     }
 
-    if(state.timeElapsedInMilliseconds == 0 && canStopLooping){
+    if(state.timeElapsedInMilliseconds < 100 && canStopLooping){
       canStopLooping = false;
       state.recording = false;
       state.playing = false;
-      //this.onEnd();
+      onEnd();
     }
 
     if(state.recording || state.playing){

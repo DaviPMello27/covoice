@@ -288,7 +288,7 @@ class _MainPageState extends State<MainPage> {
           }
         }
       },
-      (amp){
+      onAmplitudeChanged: (amp){
         /* log("Amp $amp"); */
       }
     );

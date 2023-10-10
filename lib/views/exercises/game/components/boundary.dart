@@ -9,7 +9,7 @@ class Boundary extends PositionComponent with HasGameRef {
 
   List<String> notes = MusicModel.notes;
 
-  final double noteLabelHeight = 30; //log(note, 2) * 360 - log(previousNote, 2) * 360 = (2891.29... - 2921.28...)
+  static const double noteLabelHeight = 30; //log(note, 2) * 360 - log(previousNote, 2) * 360 = (2891.29... - 2921.28...)
   late final Color _noteOddColor = Theme.of(context).colorScheme.secondaryVariant;
   late final Color _noteEvenColor = _noteOddColor
     .withRed(min((_noteOddColor.red * 1.3).toInt(), 255))

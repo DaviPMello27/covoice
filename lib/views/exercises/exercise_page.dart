@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:covoice/controller/recording_controller.dart';
 import 'package:covoice/entities/exercise.dart';
+import 'package:covoice/entities/game_note.dart';
 import 'package:covoice/entities/note.dart';
 import 'package:covoice/model/recording_model.dart';
+import 'package:covoice/views/exercises/exercise_results_page.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
 import 'package:covoice/views/exercises/game/exercise_game.dart';
 import 'package:covoice/views/exercises/game/exercise_game_state.dart';
@@ -23,20 +25,25 @@ class ExercisePage extends StatefulWidget {
 }
 
 class _ExercisePageState extends State<ExercisePage> {
-  Note sangNote = Note(time: 0);
   bool loaded = false;
-  bool recording = false;
-  bool playing = false;
-  List<String> noteStrings = []; //TODO: Convert right here to a note of some kind and stop working with strings
+  late ExerciseGameState state;
 
   final RecordingController recordingController = RecordingController(RecordingModel());
 
   Future loadExerciseNoteStrings() async {
     String exercisePath = widget.exercise.getFullPath;
     String fileString = await rootBundle.loadString('$exercisePath/notes');
-    noteStrings = LineSplitter.split(fileString).toList();
-    
+    //gameNotes = LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList();
+
     setState(() {
+      state = ExerciseGameState(
+        context: context,
+        exercise: widget.exercise,
+        note: Note(time: 0),
+        notes: LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList(),
+        playing: false,
+        recording: false,
+      );
       loaded = true;
     });
   }
@@ -66,7 +73,7 @@ class _ExercisePageState extends State<ExercisePage> {
               child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
             ),
             Text(
-              widget.exercise.getTitle,
+              widget.exercise.title,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             Expanded(
@@ -75,14 +82,17 @@ class _ExercisePageState extends State<ExercisePage> {
                 child: ClipRect(
                   child: GameWidget(
                     game: ExerciseGame(
-                      state: ExerciseGameState(
-                        note: sangNote,
-                        exercise: widget.exercise,
-                        context: context,
-                        noteStrings: noteStrings,
-                        playing: playing,
-                        recording: recording,
-                      )
+                      state: state,
+                      onEnd: (){
+                        recordingController.stopRecordingStreamWithoutStoring();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => ExerciseResultsPage(state: state, number: widget.number))
+                        );
+                        setState(() {
+                          state.playing = false;
+                          state.recording = false;
+                        });
+                      }
                     )
                   ),
                 ),
@@ -95,27 +105,26 @@ class _ExercisePageState extends State<ExercisePage> {
                   scale: 2,
                   child: IconButton(
                     onPressed: (){
-                      if(!recording){
-                        recordingController.startRecordingStream(
-                          (frequency){
-                            if(frequency != -1.0 && frequency > 100 && frequency < 800){
-                              sangNote.frequency = frequency;
-                            }
-                          },
-                          (amp){
-                            /* log("Amp $amp"); */
-                          }
-                        );
-                      } else {
-                        recordingController.stopRecordingStream();
-                      }
+                      if(!state.playing){
+                        if(!state.recording){
+                          recordingController.startRecordingStreamWithoutStoring(
+                            (frequency){
+                              if(frequency != -1.0 && frequency > 100 && frequency < 800){
+                                state.note.frequency = frequency;
+                              }
+                            },
+                          );
+                        } else {
+                          recordingController.stopRecordingStreamWithoutStoring();
+                        }
 
-                      setState(() {
-                        recording = !recording;
-                      });
+                        setState(() {
+                          state.recording = !state.recording;
+                        });
+                      }
                     },
                     icon: Icon(
-                      recording ? Icons.stop : Icons.mic,
+                      state.recording ? Icons.stop : Icons.mic,
                       color: const Color.fromARGB(255, 178, 215, 232),
                     )
                   ),
@@ -123,10 +132,16 @@ class _ExercisePageState extends State<ExercisePage> {
                 Transform.scale(
                   scale: 2,
                   child: IconButton(
-                    onPressed: (){},
-                    icon: const Icon(
-                      Icons.play_arrow,
-                      color: Color.fromARGB(255, 178, 215, 232),
+                    onPressed: (){
+                      if(!state.recording){
+                        setState(() {
+                          state.playing = !state.playing;
+                        });
+                      }
+                    },
+                    icon: Icon(
+                      !state.playing ? Icons.play_arrow : Icons.pause,
+                      color: const Color.fromARGB(255, 178, 215, 232),
                     )
                   ),
                 ),
@@ -135,88 +150,6 @@ class _ExercisePageState extends State<ExercisePage> {
           ],
         ),
       ) : const Center(child: CircularProgressIndicator(),)
-    );
-  }
-}
-
-class _ExerciseModuleListTile extends StatelessWidget {
-  late int maxStars;
-  late int currentStars;
-  late double completionRate;
-  final String title;
-  final List<Exercise> exercises;
-
-  _ExerciseModuleListTile({required this.title, required this.exercises, Key? key }) : super(key: key) {
-    maxStars = exercises.length * 5;
-    int starCounter = 0;
-    for(Exercise exercise in exercises){
-      starCounter += exercise.getStars;
-    }
-    currentStars = starCounter;
-    completionRate = currentStars / maxStars;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).colorScheme.secondaryVariant, width: 0.5);
-    Color medalColor = Colors.brown;    
-    
-    if(completionRate == 1){
-      medalColor = Colors.lightBlue;
-    } else if(completionRate >= 0.8){
-      medalColor = Colors.yellowAccent;
-    } else if(completionRate >= 0.4){
-      medalColor = Colors.grey;
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: ListTile(
-        shape: Border(top: verticalBorder, bottom: verticalBorder),
-        trailing: Icon(
-          Icons.chevron_right, 
-          color: Theme.of(context).colorScheme.secondaryVariant,
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18
-          )
-        ),
-        leading: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: medalColor,
-                border: Border.all(
-                  width: 1, 
-                  color: Colors.blueGrey.shade900
-                ),
-              ),
-            ),
-            const SizedBox(width: 5),
-            Text(
-              '$currentStars/$maxStars', 
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ],
-        ),
-        onTap: (){
-          Navigator.push(
-            context, 
-            MaterialPageRoute(
-              builder: (context) => ExercisesListPage(
-                moduleName: title, 
-                exercises: exercises
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }

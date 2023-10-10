@@ -42,7 +42,7 @@ class _ExerciseListTile extends StatelessWidget {
       child: ListTile(
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         title: Text(
-          '$number. ${exercise.getTitle}',
+          '$number. ${exercise.title}',
           style: const TextStyle(
             fontSize: 18
           )
@@ -53,7 +53,7 @@ class _ExerciseListTile extends StatelessWidget {
             ...Iterable<int>.generate(5).map(
               (n) => Icon(
                 Icons.star,
-                color: (n+1) <= exercise.getStars ? Colors.yellow : Theme.of(context).colorScheme.secondaryVariant
+                color: (n+1) <= exercise.stars ? Colors.yellow : Theme.of(context).colorScheme.secondaryVariant
               )
             ),
             Icon(

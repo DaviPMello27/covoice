@@ -20,11 +20,7 @@ class LessonPage extends StatefulWidget {
   final Lesson module;
   final Lesson lesson;
 
-  LessonPage({required this.module, required this.lesson, Key? key }) : super(key: key) {
-    
-    
-    print('object');
-  }
+  const LessonPage({required this.module, required this.lesson, Key? key }) : super(key: key);
 
   @override
   State<LessonPage> createState() => _LessonPageState();
@@ -34,11 +30,6 @@ class _LessonPageState extends State<LessonPage> {
   bool loaded = false;
   final List<_LessonAudio> audios = [];
   final List<Widget> content = [];
-
-  Future<String> loadLessonFile() async {
-    //await File('lessons${widget.module.folderName}${widget.lesson.folderName}/lesson').openRead().transform(utf8.decoder).transform(const LineSplitter()).forEach(print);
-    return await rootBundle.loadString('assets/lessons${widget.module.folderName}${widget.lesson.folderName}/lesson');
-  }
 
   void loadImage(String lessonPath, String imageContent){
     List<String> separatedImageContent = imageContent.split('|');
@@ -155,7 +146,7 @@ class _LessonPageState extends State<LessonPage> {
     }
 
     content.add(
-      TextButton(
+      TextButton( //TODO: New component
         onPressed: (){
           //TODO: Mark as finished
           Navigator.pop(context);

@@ -1,41 +1,13 @@
 class Exercise {
-  late String _title;
-  late int _stars;
-  late String _folderName;
-  late String _module;
+  late String title;
+  late int stars;
+  late int maxScore;
+  late String folderName;
+  late String module;
 
-  Exercise({required String title, required int stars, required String folderName, required String module}){
-    _title = title;
-    _stars = stars;
-    _folderName = folderName;
-    _module = module;
-  }
+  Exercise({required this.title, required this.stars, required this.folderName, required this.maxScore, required this.module});
 
-  String get getTitle => _title;
-
-  set setTitle(String title){
-    _title = title;
-  }
-
-  int get getStars => _stars;
-
-  set setStars(int stars){
-    _stars = stars;
-  }
-
-  String get getFolderName => _folderName;
-
-  set setFolderName(String folderName){
-    _folderName = folderName;
-  }
-
-  String get getModule => _module;
-
-  set setModule(String module){
-    _module = module;
-  }
-
-  String get getFullPath => 'assets/exercises/$getModule$getFolderName';
+  String get getFullPath => 'assets/exercises/$module$folderName';
 
   static final List<Exercise> covoiceExercises = [
     Exercise(
@@ -43,56 +15,65 @@ class Exercise {
       title: 'Single note test: A',
       module: 'amateur',
       folderName: '/single_note_test_a',
+      maxScore: 250,
     ),
     Exercise(
       stars: 5,
-      title: 'Musical scale test: Scale of D',
+      title: 'Musical scale test: Scale of G',
       module: 'amateur',
       folderName: '/scale_of_g',
+      maxScore: 250,
     ),
     Exercise(
       stars: 4,
       title: 'Simple melody test',
       module: 'amateur',
       folderName: '/simple_melody_test',
+      maxScore: 0,
     ),
 
     Exercise(
       stars: 3,
       title: 'Happy Birthday to You',
-      folderName: '',
       module: 'intermediary',
+      folderName: '',
+      maxScore: 0,
     ),
     Exercise(
       stars: 4,
       title: 'Jingle Bells',
-      folderName: '',
       module: 'intermediary',
+      folderName: '',
+      maxScore: 0,
     ),
     Exercise(
       stars: 2,
       title: 'O Holy Night',
-      folderName: '',
       module: 'intermediary',
+      folderName: '',
+      maxScore: 0,
     ),
 
     Exercise(
       stars: 2,
       title: 'Song 1',
-      folderName: '',
       module: 'professional',
+      folderName: '',
+      maxScore: 0,
     ),
     Exercise(
       stars: 1,
       title: 'Song 2',
-      folderName: '',
       module: 'professional',
+      folderName: '',
+      maxScore: 0,
     ),
     Exercise(
       stars: 1,
       title: 'Song 3',
-      folderName: '',
       module: 'professional',
+      folderName: '',
+      maxScore: 0,
     ),
   ];
 }

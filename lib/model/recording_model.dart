@@ -49,7 +49,7 @@ class RecordingModel implements IRecordingModel {
   }
 
   @override
-  Future startRecordingStream(Function(double) onFrequencyChanged, Function(Amplitude) onAmplitudeChanged) async {
+  Future startRecordingStream(Function(double) onFrequencyChanged, Function(Amplitude)? onAmplitudeChanged) async {
     await requestRecordingPermission();
 
     await getRecorderInstance().start();
@@ -70,6 +70,32 @@ class RecordingModel implements IRecordingModel {
       },
       (error) => {log('error!')}
     );
+  }
+
+  @override
+  Future startRecordingStreamWithoutStoring(Function(double) onFrequencyChanged) async {
+    await requestRecordingPermission();
+    await audioCapture.start(
+      (obj){
+        int initialTime = DateTime.now().millisecondsSinceEpoch;
+        var buffer = Float64List.fromList(obj.cast<double>());
+        final List<double> audioSample = buffer.toList();
+        PitchDetectorResult result = pitchDetector.getPitch(audioSample);
+        //print('Processing time: ${DateTime.now().millisecondsSinceEpoch - initialTime}');
+        print(result.pitch);
+        if(result.probability < 0.8){
+          return -1.0;
+        } 
+        onFrequencyChanged(result.pitch);
+      },
+      (error) => {log('error!')}
+    );
+  }
+
+  @override
+  Future stopRecordingStreamWithoutStoring() async {
+    await audioCapture.stop();
+    return;
   }
 
   @override

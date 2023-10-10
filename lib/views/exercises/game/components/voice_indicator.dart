@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:covoice/entities/game_note.dart';
 import 'package:covoice/entities/note.dart';
+import 'package:covoice/views/exercises/game/components/boundary.dart';
 import 'package:covoice/views/exercises/game/exercise_game_state.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
     //two octaves lower
     add(
       CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, 30 * 24),
+        position: Vector2(gameRef.size.x * 0.15 - 7, Boundary.noteLabelHeight * 24),
         radius: 7,
         paint: Paint()..color = twoOctavesVoiceIndicatorColor,
       )
@@ -34,7 +36,7 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
     //one octave lower
     add(
       CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, 30 * 12),
+        position: Vector2(gameRef.size.x * 0.15 - 7, Boundary.noteLabelHeight * 12),
         radius: 7,
         paint: Paint()..color = oneOctaveVoiceIndicatorColor,
       )
@@ -52,7 +54,7 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
     //one octave higher
     add(
       CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, -30 * 12),
+        position: Vector2(gameRef.size.x * 0.15 - 7, -Boundary.noteLabelHeight * 12),
         radius: 7,
         paint: Paint()..color = oneOctaveVoiceIndicatorColor,
       )
@@ -61,7 +63,7 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
     //two octaves higher
     add(
       CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, -30 * 24),
+        position: Vector2(gameRef.size.x * 0.15 - 7, -Boundary.noteLabelHeight * 24),
         radius: 7,
         paint: Paint()..color = twoOctavesVoiceIndicatorColor,
       )
@@ -74,11 +76,25 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
   @override
   void update(double dt) {
     if((note.getFrequency ?? 0) > 0){
-      double positionY = gameRef.size.y - ((logBase(note.getFrequency!, 2) * 360) - 2660);
+      double positionY = gameRef.size.y - ((logBase(note.getFrequency!, 2) * 360) - 2660); //TODO: documentate or calculate 2660
       position.y = positionY;
 
-      List<String> noteList = ['A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4', 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3'];
-      
+      GameNote? currentNote = state.getCurrentNote();
+      if(currentNote != null){
+        double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * GameNote.range.indexOf(currentNote.note));
+
+        List<double> voiceIndicatorPositions = [
+          positionY - Boundary.noteLabelHeight * 24,
+          positionY - Boundary.noteLabelHeight * 12,
+          positionY,
+          positionY + Boundary.noteLabelHeight * 12,
+          positionY + Boundary.noteLabelHeight * 24,
+        ];
+
+        if(voiceIndicatorPositions.any((pos) => pos > currentNoteHeight && pos < currentNoteHeight + Boundary.noteLabelHeight)){
+          state.score++;
+        }
+      }
     }
     super.update(dt);
   } 
