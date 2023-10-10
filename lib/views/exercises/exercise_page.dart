@@ -115,6 +115,9 @@ class _ExercisePageState extends State<ExercisePage> {
                             },
                           );
                         } else {
+                          setState(() {
+                            state.score = 0;
+                          });
                           recordingController.stopRecordingStreamWithoutStoring();
                         }
 

@@ -1,11 +1,12 @@
 import 'package:covoice/entities/game_note.dart';
 import 'package:covoice/views/exercises/game/components/boundary.dart';
 import 'package:covoice/views/exercises/game/components/note_indicator.dart';
+import 'package:covoice/views/exercises/game/components/score_text.dart';
 import 'package:covoice/views/exercises/game/components/target_line.dart';
 import 'package:covoice/views/exercises/game/components/voice_indicator.dart';
 import 'package:covoice/views/exercises/game/exercise_game_state.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,6 @@ class ExerciseGame extends FlameGame {
   ExerciseGameState state;
   bool canStopLooping = false;
   void Function() onEnd;
-
 
   ExerciseGame({required this.state, required this.onEnd}) : super();
 
@@ -36,6 +36,8 @@ class ExerciseGame extends FlameGame {
 
     add(TargetLine(context: state.context));
     add(Boundary(context: state.context)..priority = 5);
+    //add(ScoreText(score: state.score));
+
     add(VoiceIndicator(state: state, note: state.note));
 
     for(GameNote note in state.notes){
