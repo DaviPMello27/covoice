@@ -104,7 +104,19 @@ class _MainPageState extends State<MainPage> {
                       ),
                       Container(height: 30),
                       Visibility(
-                        child: Player(controller: waveFormController),
+                        child: Player(
+                          controller: waveFormController,
+                          shareablePath: (){
+                            switch(chosenVoiceType){
+                              case VoiceType.primary:
+                                return originalAudioPath;
+                              case VoiceType.both:
+                                return joinedAudioPath;
+                              case VoiceType.secondary:
+                                return transformedAudioPath;
+                            }
+                          }(),
+                        ),
                         visible: !isRecording && noteList.isNotEmpty,
                       ),
                       Visibility(
@@ -239,9 +251,11 @@ class _MainPageState extends State<MainPage> {
       isRecording = false;
     });
 
-    if(originalAudioPath != null){
+    if(originalAudioPath != null){      
       transformedAudioPath = await widget.ffmpegController.transformIntoHarmony(originalAudioPath!, newNoteList, key);
       joinedAudioPath = await widget.ffmpegController.overlayAudios(originalAudioPath!, transformedAudioPath!);
+
+      setState(() {});
 
       waveFormController.preparePlayer(
         path: joinedAudioPath!,

@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Player extends StatefulWidget {
   final PlayerController controller; 
+  String? shareablePath;
 
-  const Player({
+  Player({
     Key? key,
     required this.controller,
+    this.shareablePath
   }) : super(key: key);
 
   @override
@@ -87,7 +90,7 @@ class PlayerState extends State<Player> {
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
               child: AudioFileWaveforms(
                 size: Size(MediaQuery.of(context).size.width / 2.5, 60.0),
@@ -105,7 +108,14 @@ class PlayerState extends State<Player> {
           Transform.scale(
             scale: 2,
             child: IconButton(
-              onPressed: (){},
+              onPressed: (){
+                if(widget.shareablePath != null){
+                  //TODO: Change to shareXFiles
+                  Share.shareFiles([
+                    widget.shareablePath!,
+                  ]);
+                }
+              },
               padding: const EdgeInsets.only(left: 10),
               icon: Icon(
                 Icons.share,

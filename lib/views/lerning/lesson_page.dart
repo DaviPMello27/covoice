@@ -119,6 +119,7 @@ class _LessonPageState extends State<LessonPage> {
     content.add(
       Player(
         controller: controller,
+        shareablePath: tempFile.path,
       )
     );
   }
