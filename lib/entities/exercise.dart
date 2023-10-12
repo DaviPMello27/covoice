@@ -19,17 +19,17 @@ class Exercise {
     ),
     Exercise(
       stars: 5,
+      title: 'Simple melody test',
+      module: 'amateur',
+      folderName: '/simple_melody_test',
+      maxScore: 600,
+    ),
+    Exercise(
+      stars: 4,
       title: 'Musical scale test: Scale of G',
       module: 'amateur',
       folderName: '/scale_of_g',
       maxScore: 640,
-    ),
-    Exercise(
-      stars: 4,
-      title: 'Simple melody test',
-      module: 'amateur',
-      folderName: '/simple_melody_test',
-      maxScore: 0,
     ),
 
     Exercise(
