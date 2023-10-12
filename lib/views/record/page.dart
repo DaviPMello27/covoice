@@ -1,12 +1,9 @@
 import 'dart:developer';
-import 'dart:ffi';
-import 'dart:typed_data';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:covoice/enums/voice_type.dart';
 import 'package:covoice/views/record/widgets/page_flag_button.dart';
 import 'package:covoice/views/record/widgets/voice_type_button.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:covoice/controller/ffmpeg_controller_inteface.dart';
 import 'package:covoice/controller/music_controller_inteface.dart';
@@ -15,11 +12,6 @@ import 'package:covoice/controller/recording_controller_interface.dart';
 import 'package:covoice/entities/note.dart';
 import 'package:covoice/views/record/widgets/player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_capture/flutter_audio_capture.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:pitch_detector_dart/pitch_detector.dart';
-import 'package:pitch_detector_dart/pitch_detector_result.dart';
-import './widgets/key_roller_list.dart';
 import './widgets/record_button.dart';
 
 class MainPage extends StatefulWidget {

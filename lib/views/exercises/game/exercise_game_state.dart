@@ -11,7 +11,7 @@ class ExerciseGameState {
   bool playing;
   bool recording;
   int timeElapsedInMilliseconds = 0;
-  int score = 0;
+  double score = 0;
 
   ExerciseGameState({
     required this.note, 

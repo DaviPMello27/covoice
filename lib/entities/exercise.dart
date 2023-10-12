@@ -22,7 +22,7 @@ class Exercise {
       title: 'Musical scale test: Scale of G',
       module: 'amateur',
       folderName: '/scale_of_g',
-      maxScore: 250,
+      maxScore: 640,
     ),
     Exercise(
       stars: 4,

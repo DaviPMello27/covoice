@@ -110,8 +110,13 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                     ),
                     child: Column(
                       children: [
-                        PerformanceIndicator(label: 'Pontuação:', value: '${widget.state.score}/${widget.state.exercise.maxScore}'),
-                        PerformanceIndicator(value: '${(widget.state.score / widget.state.exercise.maxScore) * 100}%'),
+                        PerformanceIndicator(
+                          label: 'Pontuação:',
+                          value: '${min(widget.state.score, widget.state.exercise.maxScore).toStringAsFixed(2)}/${widget.state.exercise.maxScore}'
+                        ),
+                        PerformanceIndicator(
+                          value: '${(min(widget.state.score, widget.state.exercise.maxScore)*100) ~/ widget.state.exercise.maxScore}%'
+                        ),
                       ]
                     ),
                   ),

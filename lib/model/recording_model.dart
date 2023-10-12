@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
 import 'package:flutter_fft/flutter_fft.dart';
-import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_voice_processor/flutter_voice_processor.dart';
 import 'package:pitch_detector_dart/pitch_detector.dart';
 import 'package:pitch_detector_dart/pitch_detector_result.dart';
 import 'package:record/record.dart';
@@ -12,20 +12,15 @@ import 'music_model.dart';
 import 'music_model_inteface.dart';
 import 'recording_model_interface.dart';
 
-/*
-Alternative:
-flutter_audio_capture (https://pub.dev/packages/flutter_audio_capture/example)
-         +
-pitch_detector_dart (https://pub.dev/packages/pitch_detector_dart)
-https://techpotatoes.com/2021/07/27/implementing-a-guitar-tuner-app-in-dart-flutter/
-*/
-
 class RecordingModel implements IRecordingModel {
+  final double sampleRate = 22000;
+  final int sampleSize = 512;
+
   static FlutterFft? _flutterFft;
   final FlutterAudioCapture audioCapture = FlutterAudioCapture();
-  final PitchDetector pitchDetector = PitchDetector(44100, 3000);
+  late PitchDetector pitchDetector = PitchDetector(sampleRate, sampleSize);
   final IMusicModel musicModel = MusicModel();
-  //static FlutterSoundRecorder? _soundRecorder;
+  final VoiceProcessor? _voiceProcessor = VoiceProcessor.instance;
   static Record? _recorder;
 
   static FlutterFft getFlutterFftInstance(){
@@ -62,39 +57,56 @@ class RecordingModel implements IRecordingModel {
         var buffer = Float64List.fromList(obj.cast<double>());
         final List<double> audioSample = buffer.toList();
         PitchDetectorResult result = pitchDetector.getPitch(audioSample);
-        //print('note: ${musicModel.getNearestNote(result.pitch)}, timestamp: ${DateTime.now().difference(startTime).inMilliseconds}, frequency: ${result.pitch}, probability: ${result.probability}');
+        print('note: ${musicModel.getNearestNote(result.pitch)}, timestamp: ${DateTime.now().difference(startTime).inMilliseconds}, frequency: ${result.pitch}, probability: ${result.probability}');
         if(result.probability < 0.8){
           return -1.0;
         } 
         onFrequencyChanged(result.pitch);
       },
-      (error) => {log('error!')}
+      (error) => {log('error!')},
+      sampleRate: sampleRate.toInt(),
+      bufferSize: sampleSize,
     );
   }
 
   @override
   Future startRecordingStreamWithoutStoring(Function(double) onFrequencyChanged) async {
     await requestRecordingPermission();
-    await audioCapture.start(
+
+    if(_voiceProcessor != null){
+      _voiceProcessor!.addFrameListener((frame) {
+        PitchDetectorResult result = pitchDetector.getPitch(frame.map((e) => e.toDouble()).toList());
+        onFrequencyChanged(result.pitch);
+      });
+
+      _voiceProcessor!.start(sampleSize, sampleRate.toInt());
+    }
+
+    /* await audioCapture.start(
       (obj){
-        int initialTime = DateTime.now().millisecondsSinceEpoch;
         var buffer = Float64List.fromList(obj.cast<double>());
-        final List<double> audioSample = buffer.toList();
+
+        print(obj.length);
+        //print(buffer.length);
+
+        /* final List<double> audioSample = buffer.toList();
         PitchDetectorResult result = pitchDetector.getPitch(audioSample);
-        //print('Processing time: ${DateTime.now().millisecondsSinceEpoch - initialTime}');
-        print(result.pitch);
+        print('note: ${musicModel.getNearestNote(result.pitch)}, frequency: ${result.pitch}, probability: ${result.probability}');
         if(result.probability < 0.8){
           return -1.0;
         } 
-        onFrequencyChanged(result.pitch);
+        onFrequencyChanged(result.pitch); */
       },
-      (error) => {log('error!')}
-    );
+      (error) => {log('error!')},
+      sampleRate: sampleRate.toInt(),
+      bufferSize: sampleSize,
+    ); */
   }
 
   @override
   Future stopRecordingStreamWithoutStoring() async {
-    await audioCapture.stop();
+    //await audioCapture.stop();
+    await _voiceProcessor!.stop();
     return;
   }
 

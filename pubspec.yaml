@@ -29,6 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_voice_processor: ^1.1.0
   roller_list: ^1.0.2
   flutter_fft: ^1.0.2+6
   flutter_sound: ^9.2.13

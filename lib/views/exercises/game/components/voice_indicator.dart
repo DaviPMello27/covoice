@@ -92,7 +92,7 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
         ];
 
         if(voiceIndicatorPositions.any((pos) => pos > currentNoteHeight && pos < currentNoteHeight + Boundary.noteLabelHeight)){
-          state.score++;
+          state.score += dt * 100;
         }
       }
     }
