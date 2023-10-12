@@ -43,172 +43,164 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: const Text('Covoice'),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) => 
-        SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-            child: Container(
-              color: Theme.of(context).backgroundColor,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      subtitle('Choose the song\'s key'),
-                      SizedBox(
-                        height: 100,
-                        child: CupertinoPicker(
-                          itemExtent: 30,
-                          onSelectedItemChanged: (int index){
-                            setState(() {
-                              key = widget.musicController.getNotes()[index];
-                            });
-                          },
-                          looping: true,
-                          magnification: 1.22,
-                          useMagnifier: true,
-                          squeeze: 1.2,
-                          scrollController: FixedExtentScrollController(
-                            initialItem: 0,
-                          ),
-                          children: widget.musicController.getNotes().map(
-                            (note) => Text(
-                              note,
-                              style: Theme.of(context).textTheme.bodyText1, //TODO: review "bodyText1"
-                            )
-                          ).toList()
-                        ),
+      body: SingleChildScrollView(
+        child: Container(
+          color: Theme.of(context).backgroundColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  subtitle('Choose the song\'s key'),
+                  SizedBox(
+                    height: 100,
+                    child: CupertinoPicker(
+                      itemExtent: 30,
+                      onSelectedItemChanged: (int index){
+                        setState(() {
+                          key = widget.musicController.getNotes()[index];
+                        });
+                      },
+                      looping: true,
+                      magnification: 1.22,
+                      useMagnifier: true,
+                      squeeze: 1.2,
+                      scrollController: FixedExtentScrollController(
+                        initialItem: 0,
                       ),
-                      subtitle('and click the button below to start recording.'),
-                      RecordButton(
-                        onTap: () async {
-                          if(isRecording){
-                            log("what");
-                            await stopRecording();
-                          } else {
-                            await startRecording();
-                          }
-                        },
-                        isRecording: isRecording,
-                      ),
-                      Container(height: 30),
-                      Visibility(
-                        child: Player(
-                          controller: waveFormController,
-                          shareablePath: (){
-                            switch(chosenVoiceType){
-                              case VoiceType.primary:
-                                return originalAudioPath;
-                              case VoiceType.both:
-                                return joinedAudioPath;
-                              case VoiceType.secondary:
-                                return transformedAudioPath;
-                            }
-                          }(),
-                        ),
-                        visible: !isRecording && noteList.isNotEmpty,
-                      ),
-                      Visibility(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Row(
-                            children: [
-                              VoiceTypeButton(
-                                voiceType: VoiceType.primary,
-                                selected: chosenVoiceType == VoiceType.primary,
-                                onTap: () async {
-                                  setState(() {
-                                    chosenVoiceType = VoiceType.primary;
-                                  });
-
-                                  await waveFormController.stopPlayer();
-                                  await waveFormController.preparePlayer(
-                                    path: originalAudioPath!,
-                                    shouldExtractWaveform: true,
-                                    noOfSamples: 25,
-                                    volume: 1.0,
-                                  );
-                                },
-                              ),
-                              VoiceTypeButton(
-                                voiceType: VoiceType.both,
-                                selected: chosenVoiceType == VoiceType.both,
-                                onTap: () async {
-                                  setState(() {
-                                    chosenVoiceType = VoiceType.both;
-                                  });
-
-                                  await waveFormController.stopPlayer();
-                                  await waveFormController.preparePlayer(
-                                    path: joinedAudioPath!,
-                                    shouldExtractWaveform: true,
-                                    noOfSamples: 25,
-                                    volume: 1.0,
-                                  );
-                                },
-                              ),
-                              VoiceTypeButton(
-                                voiceType: VoiceType.secondary,
-                                selected: chosenVoiceType == VoiceType.secondary,
-                                onTap: () async {
-                                  setState(() {
-                                    chosenVoiceType = VoiceType.secondary;
-                                  });
-
-                                  await waveFormController.stopPlayer();
-                                  await waveFormController.preparePlayer(
-                                    path: transformedAudioPath!,
-                                    shouldExtractWaveform: true,
-                                    noOfSamples: 25,
-                                    volume: 1.0,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        visible: !isRecording && noteList.isNotEmpty,
-                      ),
-                      Visibility(
-                        child: Text(lastNote ?? '', style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 48)),
-                        visible: isRecording,
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 60),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                PageFlagButton(
-                                  onPressed: (){
-                                    Navigator.of(context).pushNamed('/exercises');
-                                  },
-                                  color: Theme.of(context).colorScheme.secondaryVariant,
-                                  iconColor: Theme.of(context).backgroundColor,
-                                  icon: Icons.checklist,
-                                ),
-                                PageFlagButton(
-                                  onPressed: (){
-                                    Navigator.of(context).pushNamed('/learn');
-                                  },
-                                  color: Theme.of(context).colorScheme.secondaryVariant,
-                                  iconColor: Theme.of(context).backgroundColor,
-                                  icon: Icons.school,
-                                  flip: true
-                                ),
-                              ]
-                            ),
-                          ),
+                      children: widget.musicController.getNotes().map(
+                        (note) => Text(
+                          note,
+                          style: Theme.of(context).textTheme.bodyText1, //TODO: review "bodyText1"
                         )
-                      ),
-                    ],
+                      ).toList()
+                    ),
                   ),
-                ),
+                  subtitle('and click the button below to start recording.'),
+                  RecordButton(
+                    onTap: () async {
+                      if(isRecording){
+                        log("what");
+                        await stopRecording();
+                      } else {
+                        await startRecording();
+                      }
+                    },
+                    isRecording: isRecording,
+                  ),
+                  Container(height: 30),
+                  Visibility(
+                    child: Player(
+                      controller: waveFormController,
+                      shareablePath: (){
+                        switch(chosenVoiceType){
+                          case VoiceType.primary:
+                            return originalAudioPath;
+                          case VoiceType.both:
+                            return joinedAudioPath;
+                          case VoiceType.secondary:
+                            return transformedAudioPath;
+                        }
+                      }(),
+                    ),
+                    visible: !isRecording && noteList.isNotEmpty,
+                  ),
+                  Visibility( //TODO: Put in the same Visibility as the Player
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Row(
+                        children: [
+                          VoiceTypeButton(
+                            voiceType: VoiceType.primary,
+                            selected: chosenVoiceType == VoiceType.primary,
+                            onTap: () async {
+                              setState(() {
+                                chosenVoiceType = VoiceType.primary;
+                              });
+
+                              await waveFormController.stopPlayer();
+                              await waveFormController.preparePlayer(
+                                path: originalAudioPath!,
+                                shouldExtractWaveform: true,
+                                noOfSamples: 25,
+                                volume: 1.0,
+                              );
+                            },
+                          ),
+                          VoiceTypeButton(
+                            voiceType: VoiceType.both,
+                            selected: chosenVoiceType == VoiceType.both,
+                            onTap: () async {
+                              setState(() {
+                                chosenVoiceType = VoiceType.both;
+                              });
+
+                              await waveFormController.stopPlayer();
+                              await waveFormController.preparePlayer(
+                                path: joinedAudioPath!,
+                                shouldExtractWaveform: true,
+                                noOfSamples: 25,
+                                volume: 1.0,
+                              );
+                            },
+                          ),
+                          VoiceTypeButton(
+                            voiceType: VoiceType.secondary,
+                            selected: chosenVoiceType == VoiceType.secondary,
+                            onTap: () async {
+                              setState(() {
+                                chosenVoiceType = VoiceType.secondary;
+                              });
+
+                              await waveFormController.stopPlayer();
+                              await waveFormController.preparePlayer(
+                                path: transformedAudioPath!,
+                                shouldExtractWaveform: true,
+                                noOfSamples: 25,
+                                volume: 1.0,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    visible: !isRecording && noteList.isNotEmpty,
+                  ),
+                  Visibility(
+                    child: SizedBox(
+                      height: 126,
+                      child: isRecording ? Text(lastNote ?? '', style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 48)) : null
+                    ),
+                    visible: isRecording || noteList.isEmpty,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PageFlagButton(
+                          onPressed: (){
+                            Navigator.of(context).pushNamed('/exercises');
+                          },
+                          color: Theme.of(context).colorScheme.secondaryVariant,
+                          iconColor: Theme.of(context).backgroundColor,
+                          icon: Icons.checklist,
+                        ),
+                        PageFlagButton(
+                          onPressed: (){
+                            Navigator.of(context).pushNamed('/learn');
+                          },
+                          color: Theme.of(context).colorScheme.secondaryVariant,
+                          iconColor: Theme.of(context).backgroundColor,
+                          icon: Icons.school,
+                          flip: true
+                        ),
+                      ]
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
