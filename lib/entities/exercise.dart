@@ -34,7 +34,7 @@ class Exercise {
 
   String get getFullPath => 'assets/exercises/$module$folderName';
 
-  static final List<Exercise> covoiceExercises = [
+  static final List<Exercise> covoiceExerciseInitializationList = [
     Exercise(
       maxScore: 5,
       title: 'Single note test: A',
