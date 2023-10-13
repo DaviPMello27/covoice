@@ -16,15 +16,15 @@ class ExerciseModulesListPage  extends StatelessWidget {
           children: [
             _ExerciseModuleListTile(
               title: 'Amateur',
-              exercises: Exercise.covoiceExercises.where((e) => e.module == 'amateur').toList()
+              exercises: Exercise.covoiceExerciseInitializationList.where((e) => e.module == 'amateur').toList()
             ),
             _ExerciseModuleListTile(
               title: 'Intermediary',
-              exercises: Exercise.covoiceExercises.where((e) => e.module == 'intermediary').toList()
+              exercises: Exercise.covoiceExerciseInitializationList.where((e) => e.module == 'intermediary').toList()
             ),
             _ExerciseModuleListTile(
               title: 'Professional',
-              exercises: Exercise.covoiceExercises.where((e) => e.module == 'professional').toList()
+              exercises: Exercise.covoiceExerciseInitializationList.where((e) => e.module == 'professional').toList()
             ),
           ],
         ),
@@ -44,7 +44,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
     maxStars = exercises.length * 5;
     int starCounter = 0;
     for(Exercise exercise in exercises){
-      starCounter += exercise.stars;
+      starCounter += exercise.getNumStars();
     }
     currentStars = starCounter;
     completionRate = currentStars / maxStars;

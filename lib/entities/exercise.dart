@@ -1,79 +1,104 @@
+import 'package:covoice/database/covoice_database.dart';
+
 class Exercise {
+  static double maxScoreTolerance = 0.1;
+
+  int? id;
   late String title;
-  late int stars;
   late int maxScore;
+  late int maxPossibleScore;
   late String folderName;
   late String module;
 
-  Exercise({required this.title, required this.stars, required this.folderName, required this.maxScore, required this.module});
+  Exercise({required this.title, required this.maxScore, required this.folderName, required this.maxPossibleScore, required this.module});
+
+  Map<String, dynamic> toMap(){
+    return {
+      'id': id,
+      'title': title,
+      'maxScore': maxScore,
+      'maxPossibleScore': maxPossibleScore,
+      'folderName': folderName,
+      'module': module,
+    };
+  }
+
+  Future<Exercise> save() async {
+    id = await (await CovoiceDatabase.getInstance()).insert('exercise', toMap());
+    return this;
+  }
+
+  int getNumStars(){
+    return (5*maxScore / (maxPossibleScore * (1-Exercise.maxScoreTolerance))).floor();
+  }
 
   String get getFullPath => 'assets/exercises/$module$folderName';
 
   static final List<Exercise> covoiceExercises = [
     Exercise(
-      stars: 5,
+      maxScore: 5,
       title: 'Single note test: A',
       module: 'amateur',
       folderName: '/single_note_test_a',
-      maxScore: 250,
+      maxPossibleScore: 250,
     ),
     Exercise(
-      stars: 5,
+      maxScore: 5,
       title: 'Simple melody test',
       module: 'amateur',
       folderName: '/simple_melody_test',
-      maxScore: 600,
+      maxPossibleScore: 600,
     ),
     Exercise(
-      stars: 4,
+      maxScore: 4,
       title: 'Musical scale test: Scale of G',
       module: 'amateur',
       folderName: '/scale_of_g',
-      maxScore: 640,
+      maxPossibleScore: 640,
     ),
 
     Exercise(
-      stars: 3,
+      maxScore: 3,
       title: 'Happy Birthday to You',
       module: 'intermediary',
       folderName: '',
-      maxScore: 0,
+      maxPossibleScore: 0,
     ),
     Exercise(
-      stars: 4,
+      maxScore: 4,
       title: 'Jingle Bells',
       module: 'intermediary',
       folderName: '',
-      maxScore: 0,
+      maxPossibleScore: 0,
     ),
     Exercise(
-      stars: 2,
+      maxScore: 2,
       title: 'O Holy Night',
       module: 'intermediary',
       folderName: '',
-      maxScore: 0,
+      maxPossibleScore: 0,
     ),
 
     Exercise(
-      stars: 2,
+      maxScore: 2,
       title: 'Song 1',
       module: 'professional',
       folderName: '',
-      maxScore: 0,
+      maxPossibleScore: 0,
     ),
     Exercise(
-      stars: 1,
+      maxScore: 1,
       title: 'Song 2',
       module: 'professional',
       folderName: '',
-      maxScore: 0,
+      maxPossibleScore: 0,
     ),
     Exercise(
-      stars: 1,
+      maxScore: 1,
       title: 'Song 3',
       module: 'professional',
       folderName: '',
-      maxScore: 0,
+      maxPossibleScore: 0,
     ),
   ];
 }

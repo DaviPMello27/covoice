@@ -25,7 +25,6 @@ class ExerciseResultsPage extends StatefulWidget {
 }
 
 class _ExercisePageState extends State<ExerciseResultsPage> {
-  final double maxScoreTolerance = 0.1;
   bool loaded = false;
   int numStars = 0;
 
@@ -34,11 +33,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
     widget.state.recording = false;
     widget.state.playing = false;
     
-    numStars = (5*widget.state.score / (widget.state.exercise.maxScore * (1-maxScoreTolerance))).floor();
-
-    if(numStars > widget.state.exercise.stars){
-      widget.state.exercise.stars = numStars;
-    }
+    numStars = widget.state.exercise.getNumStars();
 
     setState(() {
       loaded = true;
@@ -80,7 +75,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (i){
-                      double fiveStarsScore = widget.state.exercise.maxScore * (1-maxScoreTolerance);
+                      double fiveStarsScore = widget.state.exercise.maxPossibleScore * (1-Exercise.maxScoreTolerance);
                       double currentScoreThreshold = fiveStarsScore / 5 * (i+1);
 
                     
@@ -112,10 +107,10 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                       children: [
                         PerformanceIndicator(
                           label: 'Pontuação:',
-                          value: '${min(widget.state.score, widget.state.exercise.maxScore).toStringAsFixed(2)}/${widget.state.exercise.maxScore}'
+                          value: '${min(widget.state.score, widget.state.exercise.maxPossibleScore).toStringAsFixed(2)}/${widget.state.exercise.maxPossibleScore}'
                         ),
                         PerformanceIndicator(
-                          value: '${(min(widget.state.score, widget.state.exercise.maxScore)*100) ~/ widget.state.exercise.maxScore}%'
+                          value: '${(min(widget.state.score, widget.state.exercise.maxPossibleScore)*100) ~/ widget.state.exercise.maxPossibleScore}%'
                         ),
                       ]
                     ),
