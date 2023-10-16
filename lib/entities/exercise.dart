@@ -62,21 +62,21 @@ class Exercise {
       title: 'Happy Birthday to You',
       module: 'intermediary',
       folderName: '',
-      maxPossibleScore: 0,
+      maxPossibleScore: 1,
     ),
     Exercise(
       maxScore: 4,
       title: 'Jingle Bells',
       module: 'intermediary',
       folderName: '',
-      maxPossibleScore: 0,
+      maxPossibleScore: 1,
     ),
     Exercise(
       maxScore: 2,
       title: 'O Holy Night',
       module: 'intermediary',
       folderName: '',
-      maxPossibleScore: 0,
+      maxPossibleScore: 1,
     ),
 
     Exercise(
@@ -84,21 +84,21 @@ class Exercise {
       title: 'Song 1',
       module: 'professional',
       folderName: '',
-      maxPossibleScore: 0,
+      maxPossibleScore: 1,
     ),
     Exercise(
       maxScore: 1,
       title: 'Song 2',
       module: 'professional',
       folderName: '',
-      maxPossibleScore: 0,
+      maxPossibleScore: 1,
     ),
     Exercise(
       maxScore: 1,
       title: 'Song 3',
       module: 'professional',
       folderName: '',
-      maxPossibleScore: 0,
+      maxPossibleScore: 1,
     ),
   ];
 }

@@ -39,7 +39,7 @@ class _ExercisePageState extends State<ExercisePage> {
       state = ExerciseGameState(
         context: context,
         exercise: widget.exercise,
-        note: Note(time: 0),
+        sangNote: Note(time: 0),
         notes: LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList(),
         playing: false,
         recording: false,
@@ -110,7 +110,7 @@ class _ExercisePageState extends State<ExercisePage> {
                           recordingController.startRecordingStreamWithoutStoring(
                             (frequency){
                               if(frequency != -1.0 && frequency > 100 && frequency < 800){
-                                state.note.frequency = frequency;
+                                state.sangNote.frequency = frequency;
                               }
                             },
                           );

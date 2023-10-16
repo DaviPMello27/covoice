@@ -21,6 +21,8 @@ class ExerciseGame extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    state.displayedNotes = Boundary.getDisplayedNoteList(size.y, state.notes);
+
     if(state.playing || state.recording){ //Maybe you'll have to move this if you manage to make the canvas not rerender
       FlameAudio.audioCache.prefix = '';
       FlameAudio.bgm.play('${state.exercise.getFullPath}/audio.mp3');
@@ -35,10 +37,10 @@ class ExerciseGame extends FlameGame {
     );
 
     add(TargetLine(context: state.context));
-    add(Boundary(context: state.context)..priority = 5);
+    add(Boundary(state: state)..priority = 5);
     //add(ScoreText(score: state.score));
 
-    add(VoiceIndicator(state: state, note: state.note));
+    add(VoiceIndicator(state: state, note: state.sangNote));
 
     for(GameNote note in state.notes){
       add(NoteIndicator.fromGameNote(note, state));

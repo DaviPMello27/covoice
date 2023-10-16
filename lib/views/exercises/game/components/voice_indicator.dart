@@ -76,6 +76,7 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
   @override
   void update(double dt) {
     if((note.getFrequency ?? 0) > 0){
+      //TODO: Replace this calculation with another one that's based on the displayed notes (good luck)
       double positionY = gameRef.size.y - ((logBase(note.getFrequency!, 2) * 360) - 2660); //TODO: documentate or calculate 2660
       position.y = positionY;
 
