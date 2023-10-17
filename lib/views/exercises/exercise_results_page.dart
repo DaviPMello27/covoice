@@ -55,7 +55,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Results'),
+        title: const Text('Resultados'),
       ),
       body: Builder(
         builder: (context) {
@@ -65,7 +65,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                 children: [
                   const SizedBox(height: 40),
                   Text(
-                    'Exercise ${widget.number}',
+                    'Exercício ${widget.number}',
                     style: Theme.of(context).textTheme.headline3,
                   ),
                   SizedBox(
@@ -129,7 +129,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                     children: [
                       Flexible(
                         child: _ExerciseResultsPageButton(
-                          'Return', 
+                          'Voltar', 
                           icon: Icons.arrow_back, 
                           onTap: (){
                             int count = 2;
@@ -139,7 +139,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                       ),
                       Flexible(
                         child: _ExerciseResultsPageButton(
-                          'Retry',
+                          'Repetir',
                           icon: Icons.replay_rounded,
                           onTap: (){
                             widget.state.reset();

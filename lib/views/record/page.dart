@@ -53,7 +53,7 @@ class _MainPageState extends State<MainPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  subtitle('Choose the song\'s key'),
+                  subtitle('Escolha o tom da música'),
                   SizedBox(
                     height: 100,
                     child: CupertinoPicker(
@@ -78,7 +78,7 @@ class _MainPageState extends State<MainPage> {
                       ).toList()
                     ),
                   ),
-                  subtitle('and click the button below to start recording.'),
+                  subtitle('e clique no botão abaixo para começar a gravar.'),
                   RecordButton(
                     onTap: () async {
                       if(isRecording){

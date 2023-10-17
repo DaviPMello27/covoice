@@ -11,58 +11,58 @@ class Lesson {
   static final List<Lesson> covoiceModules = [
     Lesson(
       id: 1,
-      title: 'Theory 1: The fundamentals',
+      title: 'Teoria 1: Os fundamentos',
       folderName: '/module_1',
       isModule: true,
       childLessons: [
         Lesson(
           id: 1,
-          title: 'Introduction to music',
+          title: 'Introdução à música',
           folderName: '/introduction_to_music',
           completed: true,
         ),
         Lesson(
           id: 2,
-          title: 'Notes',
+          title: 'Notas',
           folderName: '/notes',
           completed: true,
         ),
         Lesson(
           id: 3,
-          title: 'Pitch',
+          title: 'Altura',
           folderName: '/pitch',
         ),
         Lesson(
           id: 4,
-          title: 'Frequency',
+          title: 'Frequência',
           folderName: '/frequency',
         ),
       ]
     ),
     Lesson(
       id: 2, 
-      title: 'Theory 2: Harmony', 
+      title: 'Teoria 2: Harmonia', 
       folderName: '/module_2', 
       isModule: true,
       childLessons: [
         Lesson(
           id: 1,
-          title: 'Introduction to intervals',
+          title: 'Introdução aos intervalos',
           folderName: '/introduction_to_intervals',
         ),
         Lesson(
           id: 2,
-          title: 'Chords',
+          title: 'Acordes',
           folderName: '/chords',
         ),
         Lesson(
           id: 3,
-          title: 'Vocal harmony: The basics',
+          title: 'Harmonia vocal: o básico',
           folderName: '/vocal_harmony_the_basics',
         ),
         Lesson(
           id: 4,
-          title: 'Vocal harmony: Advanced',
+          title: 'Harmonia vocal: avançado',
           folderName: '/vocal_harmony_advanced',
         ),
       ]

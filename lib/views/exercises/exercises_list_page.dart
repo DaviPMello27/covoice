@@ -39,7 +39,7 @@ class _ExercisesListPageState extends State<ExercisesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercises'),
+        title: const Text('Exercícios'),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -58,14 +58,14 @@ class _ExercisePageState extends State<ExercisePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercise'),
+        title: const Text('Exercício'),
       ),
       body: loaded ? Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
             Text(
-              'Exercise ${widget.number}',
+              'Exercício ${widget.number}',
               style: Theme.of(context).textTheme.headline3,
             ),
             SizedBox(

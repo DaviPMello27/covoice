@@ -11,7 +11,7 @@ class LessonListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercises'),
+        title: const Text('Aulas'),
       ),
       body: SingleChildScrollView(
         child: Column(

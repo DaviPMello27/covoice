@@ -82,24 +82,38 @@ class Exercise {
     db.update('exercise', {'maxScore': 0});
   }
 
+  //TODO: Internationalization
+  static String translateModule(String moduleName){
+    switch(moduleName){
+      case 'amateur':
+        return 'amador';
+      case 'intermediary':
+        return 'intermediário';
+      case 'professional':
+        return 'profissional';
+      default:
+        return 'null';
+    }
+  }
+
   static final List<Exercise> covoiceExerciseInitializationList = [
     Exercise(
       maxScore: 0,
-      title: 'Single note test: A',
+      title: 'Teste de uma nota: A',
       module: 'amateur',
       folderName: '/single_note_test_a',
       maxPossibleScore: 250,
     ),
     Exercise(
       maxScore: 0,
-      title: 'Simple melody test',
+      title: 'Teste de melodia simples',
       module: 'amateur',
       folderName: '/simple_melody_test',
       maxPossibleScore: 600,
     ),
     Exercise(
       maxScore: 0,
-      title: 'Musical scale test: Scale of G',
+      title: 'Teste de escala musical: Escala de G',
       module: 'amateur',
       folderName: '/scale_of_g',
       maxPossibleScore: 640,

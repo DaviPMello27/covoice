@@ -51,7 +51,7 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Modules'),
+        title: const Text('Módulos'),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
@@ -65,7 +65,7 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
         child: Column(
           children: modules!.entries.map(
             (entry) => _ExerciseModuleListTile(
-              title: entry.key[0].toUpperCase() + entry.key.substring(1),
+              title: Exercise.translateModule(entry.key)[0].toUpperCase() + Exercise.translateModule(entry.key).substring(1),
               exercises: entry.value,
               inDevelopment: ['intermediary', 'professional'].contains(entry.key),
               onReturn: (){

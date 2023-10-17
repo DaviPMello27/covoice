@@ -9,7 +9,7 @@ class LearningModulesListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercises'),
+        title: const Text('Módulos'),
       ),
       body: SingleChildScrollView(
         child: Column(
