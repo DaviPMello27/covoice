@@ -117,9 +117,12 @@ class _LessonPageState extends State<LessonPage> {
     audios.add(_LessonAudio(controller: controller, tempFile: tempFile));
 
     content.add(
-      Player(
-        controller: controller,
-        shareablePath: tempFile.path,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Player(
+          controller: controller,
+          shareablePath: tempFile.path,
+        ),
       )
     );
   }
