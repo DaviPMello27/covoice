@@ -1,5 +1,6 @@
 import 'package:covoice/entities/exercise.dart';
 import 'package:covoice/views/exercises/exercise_page.dart';
+import 'package:covoice/views/themes.dart';
 import 'package:flutter/material.dart';
 
 class ExercisesListPage  extends StatefulWidget {
@@ -85,10 +86,7 @@ class _ExerciseListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ...Iterable<int>.generate(5).map(
-              (n) => Icon(
-                Icons.star,
-                color: (n+1) <= exercise.getNumStars() ? Colors.yellow : Theme.of(context).colorScheme.secondaryVariant
-              )
+              (n) => _Star(color: (n+1) <= exercise.getNumStars() ? CovoiceTheme.customColors.of(context).gold : Theme.of(context).colorScheme.secondaryVariant)
             ),
             Icon(
               Icons.chevron_right, 
@@ -111,6 +109,36 @@ class _ExerciseListTile extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+}
+
+class _Star extends StatelessWidget {
+  Color color;
+  _Star({ required this.color, Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Transform mainStar = Transform.scale(
+      scale: 0.6, 
+      child: Icon(
+        Icons.star,
+        color: color,
+      ),
+    );
+
+    Icon borderStar = Icon(
+      Icons.star,
+      color: Theme.of(context).colorScheme.secondaryVariant,
+    );
+
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        borderStar,
+        mainStar,
+      ],
     );
   }
 }

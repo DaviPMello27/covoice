@@ -63,13 +63,14 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
             return SingleChildScrollView(
               child: Column(
                 children: [
+                  const SizedBox(height: 40),
                   Text(
                     'Exercise ${widget.number}',
                     style: Theme.of(context).textTheme.headline3,
                   ),
                   SizedBox(
                     width: WidthProportion.of(context).half,
-                    child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
+                    child: Divider(color: Theme.of(context).colorScheme.secondary),
                   ),
                   Text(
                     widget.state.exercise.module[0].toUpperCase() + widget.state.exercise.module.substring(1),
@@ -97,7 +98,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                           child: Icon(
                             Icons.star,
                             size: 64,
-                            color: widget.state.score >= currentScoreThreshold ? Colors.yellow : Theme.of(context).colorScheme.secondaryVariant,
+                            color: widget.state.score >= currentScoreThreshold ? CovoiceTheme.customColors.of(context).gold : Theme.of(context).colorScheme.secondaryVariant,
                           ),
                         ),
                       );

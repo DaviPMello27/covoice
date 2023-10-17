@@ -39,7 +39,7 @@ class _ExercisePageState extends State<ExercisePage> {
       state = ExerciseGameState(
         context: context,
         exercise: widget.exercise,
-        note: Note(time: 0),
+        note: Note(time: 0, frequency: double.infinity),
         notes: LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList(),
         playing: false,
         recording: false,
@@ -70,7 +70,7 @@ class _ExercisePageState extends State<ExercisePage> {
             ),
             SizedBox(
               width: WidthProportion.of(context).half,
-              child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
+              child: Divider(color: Theme.of(context).colorScheme.secondary),
             ),
             Text(
               widget.exercise.title,
@@ -83,12 +83,20 @@ class _ExercisePageState extends State<ExercisePage> {
                   child: GameWidget(
                     game: ExerciseGame(
                       state: state,
-                      onEnd: (){
+                      onEndPlaying: (){
+                        setState(() {
+                          state.note.frequency = double.infinity;
+                          state.playing = false;
+                          state.recording = false;
+                        });
+                      },
+                      onEndRecording: (){
                         recordingController.stopRecordingStreamWithoutStoring();
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => ExerciseResultsPage(state: state, number: widget.number))
                         );
                         setState(() {
+                          state.note.frequency = double.infinity;
                           state.playing = false;
                           state.recording = false;
                         });
@@ -117,6 +125,7 @@ class _ExercisePageState extends State<ExercisePage> {
                         } else {
                           setState(() {
                             state.score = 0;
+                            state.note.frequency = double.infinity;
                           });
                           recordingController.stopRecordingStreamWithoutStoring();
                         }
@@ -128,7 +137,7 @@ class _ExercisePageState extends State<ExercisePage> {
                     },
                     icon: Icon(
                       state.recording ? Icons.stop : Icons.mic,
-                      color: const Color.fromARGB(255, 178, 215, 232),
+                      color: Theme.of(context).colorScheme.secondary
                     )
                   ),
                 ),
@@ -138,13 +147,14 @@ class _ExercisePageState extends State<ExercisePage> {
                     onPressed: (){
                       if(!state.recording){
                         setState(() {
+                          state.note.frequency = double.infinity;
                           state.playing = !state.playing;
                         });
                       }
                     },
                     icon: Icon(
                       !state.playing ? Icons.play_arrow : Icons.pause,
-                      color: const Color.fromARGB(255, 178, 215, 232),
+                      color: Theme.of(context).colorScheme.secondary
                     )
                   ),
                 ),

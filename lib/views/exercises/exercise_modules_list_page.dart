@@ -1,5 +1,6 @@
 import 'package:covoice/entities/exercise.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
+import 'package:covoice/views/themes.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseModulesListPage  extends StatefulWidget {
@@ -84,18 +85,21 @@ class _ExerciseModuleListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BorderSide verticalBorder = BorderSide(
-      color: inDevelopment ? Colors.grey : Theme.of(context).colorScheme.secondary,
+      color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
       width: 0.5
     );
-    Color medalColor = Colors.brown;    
+    Color medalColor = Colors.lightBlue[200]!;
+    //Color medalColor = CovoiceTheme.customColors.of(context).gold;    
+    //Color medalColor = CovoiceTheme.customColors.of(context).silver;    
+    //Color medalColor = CovoiceTheme.customColors.of(context).bronze;    
     
-    if(completionRate == 1){
-      medalColor = Colors.lightBlue;
+    /* if(completionRate == 1){
+      medalColor = CovoiceTheme.customColors.of(context).platinum;
     } else if(completionRate >= 0.8){
-      medalColor = Colors.yellowAccent;
+      medalColor = CovoiceTheme.customColors.of(context).gold;
     } else if(completionRate >= 0.4){
-      medalColor = Colors.grey;
-    }
+      medalColor = CovoiceTheme.customColors.of(context).silver;
+    } */
 
     return Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -103,7 +107,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         trailing: Icon(
           Icons.chevron_right, 
-          color: inDevelopment ? Colors.grey : Theme.of(context).colorScheme.secondary,
+          color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
         ),
         title: Text(
           title + (inDevelopment ? ' - Em desenvolvimento' : ''),
@@ -124,7 +128,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
                 color: medalColor,
                 border: Border.all(
                   width: 1, 
-                  color: Theme.of(context).colorScheme.background
+                  color: Theme.of(context).colorScheme.secondaryVariant
                 ),
               ),
             ),

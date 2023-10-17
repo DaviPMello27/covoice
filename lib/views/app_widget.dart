@@ -33,8 +33,8 @@ class AppWidget extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
       title: 'Covoice',
-      darkTheme: VoicifyTheme.dark,
-      theme: VoicifyTheme.dark,
+      darkTheme: CovoiceTheme.dark,
+      theme: CovoiceTheme.dark,
       home: home,
     );
   }
