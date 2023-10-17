@@ -21,8 +21,8 @@ class CovoiceDatabase {
           '''CREATE TABLE exercise (
               id INTEGER PRIMARY KEY,
               title TEXT,
-              maxScore REAL,
-              maxPossibleScore REAL,
+              maxScore INTEGER,
+              maxPossibleScore INTEGER,
               folderName TEXT,
               module TEXT
             )'''

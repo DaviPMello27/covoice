@@ -28,6 +28,13 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
   bool loaded = false;
   int numStars = 0;
 
+  Future<void> updateExercise() async {
+    if(widget.state.score > widget.state.exercise.maxScore){
+      widget.state.exercise.maxScore = min(widget.state.exercise.maxScore, widget.state.score.round());
+      await Exercise.save(widget.state.exercise);
+    }
+  }
+
   @override
   void initState() {
     widget.state.recording = false;
@@ -35,8 +42,10 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
     
     numStars = widget.state.exercise.getNumStars();
 
-    setState(() {
-      loaded = true;
+    updateExercise().then((_){
+      setState(() {
+        loaded = true;
+      });
     });
 
     super.initState();
@@ -46,7 +55,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercise'),
+        title: const Text('Results'),
       ),
       body: Builder(
         builder: (context) {
@@ -76,9 +85,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (i){
                       double fiveStarsScore = widget.state.exercise.maxPossibleScore * (1-Exercise.maxScoreTolerance);
-                      double currentScoreThreshold = fiveStarsScore / 5 * (i+1);
-
-                    
+                      double currentScoreThreshold = fiveStarsScore / 5 * (i+1);                    
 
                       return Transform.translate(
                         offset: Offset(
