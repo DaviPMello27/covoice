@@ -30,7 +30,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
 
   Future<void> updateExercise() async {
     if(widget.state.score > widget.state.exercise.maxScore){
-      widget.state.exercise.maxScore = min(widget.state.exercise.maxScore, widget.state.score.round());
+      widget.state.exercise.maxScore = min(widget.state.exercise.maxPossibleScore, widget.state.score.round());
       await Exercise.save(widget.state.exercise);
     }
   }

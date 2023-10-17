@@ -18,8 +18,10 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
     return Exercise.findAllGroupByModule();
   }
 
-  @override
-  void initState() {
+  void loadModulesAndUpdateState(){
+    setState(() {
+      loaded = false;
+    });
     loadModules().then(
       (result){
         setState(() {
@@ -28,6 +30,20 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
         });
       }
     );
+  }
+
+  void resetMaxScore() {
+    setState(() {
+      loaded = false;
+    });
+    Exercise.resetMaxScore().then((value){
+      loadModulesAndUpdateState();
+    });
+  }
+
+  @override
+  void initState() {
+    loadModulesAndUpdateState();
     super.initState();
   }
 
@@ -36,6 +52,14 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Modules'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: (){
+              resetMaxScore();
+            }
+          ),
+        ],
       ),
       body: (loaded && modules != null) ? SingleChildScrollView(
         child: Column(
@@ -45,15 +69,7 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
               exercises: entry.value,
               inDevelopment: ['intermediary', 'professional'].contains(entry.key),
               onReturn: (){
-                setState(() {
-                  loaded = false;
-                });
-                loadModules().then((result){
-                  setState(() {
-                    modules = result;
-                    loaded = true;
-                  });
-                });
+                loadModulesAndUpdateState();
               }
             )
           ).toList(),
@@ -88,18 +104,16 @@ class _ExerciseModuleListTile extends StatelessWidget {
       color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
       width: 0.5
     );
-    Color medalColor = Colors.lightBlue[200]!;
-    //Color medalColor = CovoiceTheme.customColors.of(context).gold;    
-    //Color medalColor = CovoiceTheme.customColors.of(context).silver;    
-    //Color medalColor = CovoiceTheme.customColors.of(context).bronze;    
+
+    Color medalColor = CovoiceTheme.customColors.of(context).bronze;    
     
-    /* if(completionRate == 1){
+    if(completionRate == 1){
       medalColor = CovoiceTheme.customColors.of(context).platinum;
     } else if(completionRate >= 0.8){
       medalColor = CovoiceTheme.customColors.of(context).gold;
     } else if(completionRate >= 0.4){
       medalColor = CovoiceTheme.customColors.of(context).silver;
-    } */
+    }
 
     return Padding(
       padding: const EdgeInsets.only(top: 10),

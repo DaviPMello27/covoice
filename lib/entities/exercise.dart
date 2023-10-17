@@ -77,6 +77,11 @@ class Exercise {
     return exercise;
   }
 
+  static Future resetMaxScore() async {
+    Database db = await CovoiceDatabase.getInstance();
+    db.update('exercise', {'maxScore': 0});
+  }
+
   static final List<Exercise> covoiceExerciseInitializationList = [
     Exercise(
       maxScore: 0,
