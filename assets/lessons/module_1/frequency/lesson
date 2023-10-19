@@ -1,0 +1,7 @@
+[text|headline3]Frequências
+[text|bodyText2]O som é constituído por alterações na pressão do ar sob a forma de *ondas*. Como uma grandeza física, estas ondas possuem características como amplitude e frequência.
+[image]Representação de uma onda|frequency.png
+[text|bodyText2]A frequência sonora é a propriedade que *indica em qual das notas apresentadas nas lições anteriores um som será caracterizado*, diretamente atrelado à sua *altura*.
+[text|bodyText2]A seguir se apresenta uma tabela que relaciona as notas com sua determinada frequência sonora, medida em _Hertz_ (_Hz_):
+[image]Tabela de relação entre frequências e notas|frequency_table.png
+[text|bodyText2]Obs.: Todo o processamento de áudio presente neste aplicativo, desde a geração da segunda voz até a interação do microfone com os exercícios práticos, foi feita com cálculos de frequências sonoras.
