@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:covoice/entities/lesson.dart';
+import 'package:covoice/entities/lesson_module.dart';
 import 'package:covoice/views/record/widgets/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,7 @@ class _LessonAudio {
 }
 
 class LessonPage extends StatefulWidget {
-  final Lesson module;
+  final LessonModule module;
   final Lesson lesson;
 
   const LessonPage({required this.module, required this.lesson, Key? key }) : super(key: key);
@@ -218,8 +219,9 @@ class _LessonPageState extends State<LessonPage> {
       Padding(
         padding: const EdgeInsets.only(top: 30, bottom: 10),
         child: TextButton( //TODO: New component
-          onPressed: (){
-            //TODO: Mark as finished
+          onPressed: () async {
+            //TODO: Loading indicator in the button itself
+            await widget.lesson.markAsFinished();
             Navigator.pop(context);
           },
           child: Row(

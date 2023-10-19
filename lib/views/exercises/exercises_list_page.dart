@@ -17,7 +17,7 @@ class _ExercisesListPageState extends State<ExercisesListPage> {
   List<Exercise> exercises = [];
   
   Future updateExercises() async {
-    Exercise.findByModule(widget.moduleName).then(
+    Exercise.findAllByModule(widget.moduleName).then(
       (result) {
         setState(() {
           exercises = result;

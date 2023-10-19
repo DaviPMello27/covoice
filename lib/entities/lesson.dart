@@ -1,89 +1,119 @@
+import 'package:covoice/database/covoice_database.dart';
+import 'package:covoice/entities/lesson_module.dart';
+import 'package:sqflite/sqlite_api.dart';
+
+//TODO: Entity annotation
 class Lesson {
-  int id;
-  bool isModule;
+  static const String tableName = 'lesson';
+  
+  int? id;
   String title;
   String folderName;
   bool completed;
-  List<Lesson> childLessons;
+  int? lessonModuleId;
+  LessonModule? module;
 
-  Lesson({required this.id, required this.title, required this.folderName, this.isModule = false, this.childLessons = const [], this.completed = false});
+  Lesson({this.id, required this.title, required this.folderName, this.completed = false, this.lessonModuleId});
 
-  static final List<Lesson> covoiceModules = [
+  Map<String, dynamic> toMap(){
+    return {
+      'id': id,
+      'title': title,
+      'folder_name': folderName,
+      'completed': completed ? 1 : 0,
+      'lesson_module_id': lessonModuleId,
+    };
+  }
+
+  static Lesson fromMap(Map<String, dynamic> map){
+    return Lesson(
+      id: map['id'], 
+      title: map['title'], 
+      folderName: map['folder_name'], 
+      completed: map['completed'] == 1, 
+      lessonModuleId: map['lesson_module_id'], 
+    );
+  }
+
+  @override
+  String toString(){
+    return 'id=$id, title=$title, folderName=$folderName, completed=$completed, lessonModuleId=$lessonModuleId';
+  }
+
+  static void initTable(Database db){
+    db.execute(
+      '''CREATE TABLE ${Lesson.tableName} (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        folder_name TEXT,
+        completed INTEGER,
+        lesson_module_id INTEGER,
+        FOREIGN KEY(lesson_module_id) REFERENCES ${LessonModule.tableName}(id)
+      )'''
+    );
+
+    for(Lesson lesson in Lesson.covoiceLessonInitializationList){
+      db.insert(Lesson.tableName, lesson.toMap());
+    }
+  }
+
+  static Future<List<Lesson>> findAllByLessonModule(LessonModule lessonModule) async {
+    Database db = await CovoiceDatabase.getInstance();
+    List<Map<String, dynamic>> resultList = await db.query(Lesson.tableName, where: 'lesson_module_id = ?', whereArgs: [lessonModule.id]);
+    return resultList.map((map) => Lesson.fromMap(map)).toList();
+  }
+
+  Future<void> markAsFinished() async {
+    Database db = await CovoiceDatabase.getInstance();
+    completed = true;
+    await db.insert(Lesson.tableName, toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  static Future<void> markAllAsUnfinished() async {
+    Database db = await CovoiceDatabase.getInstance();
+    await db.update(Lesson.tableName, {'completed': 0});
+  }
+
+  static final List<Lesson> covoiceLessonInitializationList = [
     Lesson(
-      id: 1,
-      title: 'Teoria 1: Os fundamentos',
-      folderName: '/module_1',
-      isModule: true,
-      childLessons: [
-        Lesson(
-          id: 1,
-          title: 'Introdução à música',
-          folderName: '/introduction_to_music',
-          completed: true,
-        ),
-        Lesson(
-          id: 2,
-          title: 'Notas',
-          folderName: '/notes',
-          completed: true,
-        ),
-        Lesson(
-          id: 3,
-          title: 'Altura',
-          folderName: '/pitch',
-        ),
-        Lesson(
-          id: 4,
-          title: 'Frequência',
-          folderName: '/frequency',
-        ),
-      ]
+      title: 'Introdução à música',
+      folderName: '/introduction_to_music',
+      lessonModuleId: 1,
     ),
     Lesson(
-      id: 2, 
-      title: 'Teoria 2: Harmonia', 
-      folderName: '/module_2', 
-      isModule: true,
-      childLessons: [
-        Lesson(
-          id: 1,
-          title: 'Introdução aos intervalos',
-          folderName: '/introduction_to_intervals',
-        ),
-        Lesson(
-          id: 2,
-          title: 'Acordes',
-          folderName: '/chords',
-        ),
-        Lesson(
-          id: 3,
-          title: 'Harmonia vocal: o básico',
-          folderName: '/vocal_harmony_the_basics',
-        ),
-        Lesson(
-          id: 4,
-          title: 'Harmonia vocal: avançado',
-          folderName: '/vocal_harmony_advanced',
-        ),
-      ]
+      title: 'Notas',
+      folderName: '/notes',
+      lessonModuleId: 1,
+    ),
+    Lesson(
+      title: 'Altura',
+      folderName: '/pitch',
+      lessonModuleId: 1,
+    ),
+    Lesson(
+      title: 'Frequência',
+      folderName: '/frequency',
+      lessonModuleId: 1,
+    ),
+    Lesson(
+      title: 'Introdução aos intervalos',
+      folderName: '/introduction_to_intervals',
+      lessonModuleId: 2,
+    ),
+    Lesson(
+      title: 'Acordes',
+      folderName: '/chords',
+      lessonModuleId: 2,
+    ),
+    Lesson(
+      title: 'Harmonia vocal: o básico',
+      folderName: '/vocal_harmony_the_basics',
+      lessonModuleId: 2,
+    ),
+    Lesson(
+      title: 'Harmonia vocal: avançado',
+      folderName: '/vocal_harmony_advanced',
+      lessonModuleId: 2,
     ),
   ];
 }
-
-/*
-
-final List<_Lesson> lessonsFromModule1 = [
-  _Lesson(completed: true, title: 'Introduction to music'),
-  _Lesson(completed: true, title: 'Notes'),
-  _Lesson(completed: false, title: 'Pitch'),
-  _Lesson(completed: false, title: 'Frequency'),
-];
-
-final List<_Lesson> lessonsFromModule2 = [
-  _Lesson(completed: false, title: 'Introduction to intervals'),
-  _Lesson(completed: false, title: 'Chords'),
-  _Lesson(completed: false, title: 'Vocal harmony: The basics'),
-  _Lesson(completed: false, title: 'Vocal harmony: Advanced'),
-];
-
-*/

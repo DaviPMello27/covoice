@@ -1,4 +1,6 @@
 import 'package:covoice/entities/exercise.dart';
+import 'package:covoice/entities/lesson.dart';
+import 'package:covoice/entities/lesson_module.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CovoiceDatabase {
@@ -17,20 +19,9 @@ class CovoiceDatabase {
     _instance = await openDatabase(
       '${await getDatabasesPath()}/covoice_database.db',
       onCreate:(db, version) {
-        db.execute(
-          '''CREATE TABLE exercise (
-              id INTEGER PRIMARY KEY,
-              title TEXT,
-              maxScore INTEGER,
-              maxPossibleScore INTEGER,
-              folderName TEXT,
-              module TEXT
-            )'''
-        );
-
-        for(Exercise exercise in Exercise.covoiceExerciseInitializationList){
-          db.insert('exercise', exercise.toMap());
-        }
+        Exercise.initTable(db);
+        LessonModule.initTable(db);
+        Lesson.initTable(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         for (var i = oldVersion - 1; i <= newVersion - 1; i++) {

@@ -1,7 +1,9 @@
 import 'package:covoice/database/covoice_database.dart';
 import 'package:sqflite/sqlite_api.dart';
 
+//TODO: Entity annotation
 class Exercise {
+  static const tableName = 'exercise';
   static double maxScoreTolerance = 0.1;
 
   int? id;
@@ -40,6 +42,23 @@ class Exercise {
     return 'id=$id, title=$title, maxScore=$maxScore, maxPossibleScore=$maxPossibleScore, folderName=$folderName, module=$module';
   }
 
+  static void initTable(Database db){
+    db.execute(
+      '''CREATE TABLE ${Exercise.tableName} (
+          id INTEGER PRIMARY KEY,
+          title TEXT,
+          maxScore INTEGER,
+          maxPossibleScore INTEGER,
+          folderName TEXT,
+          module TEXT
+        )'''
+    );
+
+    for(Exercise exercise in Exercise.covoiceExerciseInitializationList){
+      db.insert(Exercise.tableName, exercise.toMap());
+    }
+  }
+
   int getNumStars(){
     return (5*maxScore / (maxPossibleScore * (1-Exercise.maxScoreTolerance))).floor();
   }
@@ -47,16 +66,16 @@ class Exercise {
   String get getFullPath => 'assets/exercises/$module$folderName';
 
   //TODO: Place database operations elsewhere
-  static Future<List<Exercise>> findByModule(String module) async {
+  static Future<List<Exercise>> findAllByModule(String module) async {
     Database db = await CovoiceDatabase.getInstance();
-    List<Map<String, dynamic>> databaseResult = await db.query('exercise', where: 'module = ?', whereArgs: [module]);
+    List<Map<String, dynamic>> databaseResult = await db.query(Exercise.tableName, where: 'module = ?', whereArgs: [module]);
     return databaseResult.map((map) => Exercise.fromMap(map)).toList();
   }
 
   static Future<Map<String, List<Exercise>>> findAllGroupByModule() async {
     Map<String, List<Exercise>> groupedExercises = <String, List<Exercise>>{};
     Database db = await CovoiceDatabase.getInstance();
-    List<Map<String, dynamic>> databaseResult = await db.query('exercise');
+    List<Map<String, dynamic>> databaseResult = await db.query(Exercise.tableName);
     for(Map<String, dynamic> result in databaseResult){
       Exercise exercise = Exercise.fromMap(result);
       if(groupedExercises.containsKey(exercise.module)){
@@ -71,7 +90,7 @@ class Exercise {
   static Future<Exercise> save(Exercise exercise) async {
     print('Saving ${exercise.toString()}');
     Database db = await CovoiceDatabase.getInstance();
-    int insertedId = await db.insert('exercise', exercise.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    int insertedId = await db.insert(Exercise.tableName, exercise.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
     exercise.id = insertedId;
     print('Saved ${exercise.toString()}');
     return exercise;
@@ -79,7 +98,7 @@ class Exercise {
 
   static Future resetMaxScore() async {
     Database db = await CovoiceDatabase.getInstance();
-    db.update('exercise', {'maxScore': 0});
+    db.update(Exercise.tableName, {'maxScore': 0});
   }
 
   //TODO: Internationalization
