@@ -4,17 +4,18 @@ import 'package:covoice/entities/note.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseGameState {
-  Note note;
+  Note sangNote;
   BuildContext context;
   Exercise exercise;
   List<GameNote> notes;
+  List<String> displayedNotes = [];
   bool playing;
   bool recording;
   int timeElapsedInMilliseconds = 0;
   double score = 0;
 
   ExerciseGameState({
-    required this.note, 
+    required this.sangNote, 
     required this.context, 
     required this.exercise,
     required this.notes, 
