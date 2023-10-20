@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 class VoiceIndicator extends PositionComponent with HasGameRef {
   ExerciseGameState state;
   Note note;
+  late double positionOffset;
   VoiceIndicator({required this.note, required this.state}) : super();
 
   @override
@@ -23,6 +24,11 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
       .withRed((trueVoiceIndicatorColor.red * 0.4).round())
       .withGreen((trueVoiceIndicatorColor.green * 0.4).round())
       .withBlue((trueVoiceIndicatorColor.blue * 0.4).round());
+
+    int initialNotePosition = GameNote.range.indexOf(state.displayedNotes.last);
+    int defaultNotePosition = GameNote.range.indexOf('F3');
+    int noteOffset = defaultNotePosition - initialNotePosition;
+    positionOffset = (2660 + Boundary.noteLabelHeight * noteOffset) + noteOffset * 2;
 
     //two octaves lower
     add(
@@ -73,16 +79,23 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
 
   double logBase(num x, num base) => log(x) / log(base);
 
+  //TODO: Improve these calculations. Maybe change the logic.
+  double calculateVoiceIndicatorPosition(){
+    double logMultiplier = 360; //360 so the difference between the notes is always 30 (Boundary.noteLabelHeight)
+    
+    return gameRef.size.y - ((logBase(note.getFrequency!, 2) * logMultiplier) - positionOffset);
+  }
+
   @override
   void update(double dt) {
     if((note.getFrequency ?? 0) > 0){
-      //TODO: Replace this calculation with another one that's based on the displayed notes (good luck)
-      double positionY = gameRef.size.y - ((logBase(note.getFrequency!, 2) * 360) - 2660); //TODO: documentate or calculate 2660
+      double positionY = calculateVoiceIndicatorPosition();
+
       position.y = positionY;
 
       GameNote? currentNote = state.getCurrentNote();
       if(currentNote != null){
-        double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * GameNote.range.indexOf(currentNote.note));
+        double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * state.displayedNotes.indexOf(currentNote.note));
 
         List<double> voiceIndicatorPositions = [
           positionY - Boundary.noteLabelHeight * 24,
