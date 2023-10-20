@@ -1,38 +1,67 @@
 import 'package:covoice/entities/lesson.dart';
+import 'package:covoice/entities/lesson_module.dart';
 import 'package:covoice/views/lerning/lesson_page.dart';
 import 'package:flutter/material.dart';
 
-class LessonListPage extends StatelessWidget {
-  final Lesson module;
+class LessonListPage extends StatefulWidget {
+  final LessonModule module;
 
   const LessonListPage({required this.module, Key? key }) : super(key: key);
+
+  @override
+  State<LessonListPage> createState() => _LessonListPageState();
+}
+
+class _LessonListPageState extends State<LessonListPage> {
+  bool loaded = false;
+  List<Lesson>? lessons;
+
+  void loadLessons(){
+    setState(() {
+      loaded = false;
+    });
+    Lesson.findAllByLessonModule(widget.module).then((result){
+      setState(() {
+        loaded = true;
+        lessons = result;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    loadLessons();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercises'),
+        title: const Text('Lições'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: module.childLessons
+        child: loaded ? Column(
+          children: lessons!
             .map(
               (lesson) => _LessonListTile(
-                module: module,
+                module: widget.module,
                 lesson: lesson,
+                onReturn: loadLessons,
               )
             ).toList(),
-        ),
+        ) : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
 }
 
 class _LessonListTile extends StatelessWidget {
-  final Lesson module;
+  final LessonModule module;
   final Lesson lesson;
+  final void Function()? onReturn;
 
-  const _LessonListTile({ required this.module, required this.lesson, Key? key }) : super(key: key);
+  const _LessonListTile({ required this.module, required this.lesson, this.onReturn, Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +85,8 @@ class _LessonListTile extends StatelessWidget {
           Icons.chevron_right, 
           color: Theme.of(context).colorScheme.secondary
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LessonPage(
@@ -66,6 +95,9 @@ class _LessonListTile extends StatelessWidget {
               ),
             ),
           );
+          if(onReturn != null){
+            onReturn!();
+          }
         },
       ),
     );

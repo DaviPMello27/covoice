@@ -13,9 +13,10 @@ import 'package:flutter/material.dart';
 class ExerciseGame extends FlameGame {
   ExerciseGameState state;
   bool canStopLooping = false;
-  void Function() onEnd;
+  void Function() onEndRecording;
+  void Function() onEndPlaying;
 
-  ExerciseGame({required this.state, required this.onEnd}) : super();
+  ExerciseGame({required this.state, required this.onEndRecording, required this.onEndPlaying}) : super();
 
   @override
   Future<void> onLoad() async {
@@ -55,10 +56,18 @@ class ExerciseGame extends FlameGame {
     }
 
     if(state.timeElapsedInMilliseconds < 100 && canStopLooping){
+      bool wasRecording = state.recording;
+      bool wasPlaying = state.playing;
       canStopLooping = false;
       state.recording = false;
       state.playing = false;
-      onEnd();
+      if(wasRecording){
+        onEndRecording();
+      }
+
+      if(wasPlaying){
+        onEndPlaying();
+      }
     }
 
     if(state.recording || state.playing){

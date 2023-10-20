@@ -1,0 +1,8 @@
+[text|headline3]Altura
+[text|bodyText2]A altura é uma *propriedade da nota*, que determina o quão *agudo* ou *grave* o som reproduzido por ela será. No áudio a seguir, serão reproduzidas três notas: Dó, Sol e Si:
+[audio]Áudio com notas de diferentes alturas|note_pitches.mp3
+[text|bodyText2]Nota-se que as notas foram reproduzidas de maneira crescente, ou seja, da mais grave à mais aguda. Nas teclas do piano, as notas crescem em altura da esquerda para a direita:
+[image]Disposição das notas nas teclas de um piano|piano_notes.png
+[text|bodyText2]Se tocarmos as notas que estão apresentadas na imagem anterior, teríamos a seguinte sequência de sons:
+[audio]Reprodução das notas C3 a E4|piano_note_pitches.mp3
+[text|bodyText2]A altura das notas está diretamente atrelada à sua frequência sonora, tópico abordado na próxima lição.

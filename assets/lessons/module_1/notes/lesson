@@ -1,0 +1,13 @@
+[text|headline3]Notas 
+[text|bodyText2]Nota é o elemento mais básico da música, composto por uma emissão sonora que reproduz uma determinada *frequência*, durante um determinado *tempo*. De maneira mais simples, podemos ver as notas como as sílabas de um trecho musical cantado, por exemplo.
+[text|bodyText2]Ouvindo o áudio da lição anterior, tente identificar a melodia e atentar-se às diferentes notas que são entoadas:
+[audio]Música da lição anterior|joined_audio.mp3
+[text|bodyText2]Caso possua dificuldade de isolar a melodia, ouça ela sem os outros instrumentos de fundo:
+[audio]Melodia da música da lição anterior|melody.mp3
+[text|bodyText2]Abaixo se encontra uma imagem com uma representação gráfica das notas reproduzidas nesta melodia, mapeando-as com as teclas de um piano. Tente escutar os áudios acima e associar os *sons*, suas *alturas* e suas *durações* com as linhas azuis da imagem: 
+[image]Representação gráfica das notas da melodia|notes_representation.png
+[text|bodyText2]As diferentes notas são referenciadas com a seguinte nomenclatura: *Dó*, *Ré*, *Mi*, *Fá*, *Sol*, *Lá* e *Si*, também apresentadas como *C*, *D*, *E*, *F*, *G*, *A* e *B*, respectivamente.
+[text|bodyText2]Em um piano, estas notas são dispostas da seguinte maneira:
+[image]Disposição das notas nas teclas de um piano|piano_notes.png
+[text|bodyText2]Nota-se que, entre as notas que foram apresentadas, nas teclas pretas, estão os *acidentes*: o *sustenido* (#) aumenta uma determinada nota em meio tom, deixando-a um pouco mais aguda; e o *bemol* (♭), diminui uma determinada nota em meio tom, deixando-a um pouco mais grave.
+[text|bodyText2]Visualizando a disposição das notas no piano, e a imagem da representação das notas da melodia do início da lição, tente determinar as notas desta melodia.

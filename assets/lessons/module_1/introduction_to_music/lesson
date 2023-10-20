@@ -1,8 +1,13 @@
-[text|headline3]Introduction to music
-[text|bodyText2]This is some base text. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-[audio]test_audio.mp3
-[text|bodyText2]This is some base text. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-[image]this is a caption|test_image.png
-[text|bodyText2]This is some base text. But it's a very short one.
-[audio]test_audio_2.mp3
-[text|bodyText2]This is some base text. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna 
+[text|headline3]Introdução à Música
+[text|bodyText2]A arte pode ser definida, de maneira simples, como a revelação do belo, podendo ser manifestado de maneira visual, como nas artes plásticas, ou de modo audível, como é no caso das artes sonoras. A *música* é a mais comum implementação das artes sonoras, abrindo portas aos intérpretes e compositores para expressar sentimentos e transmitir mensagens através da sucessão e organização de sons.
+[text|bodyText2]A música possui três principais pilares para sua constituição: o *ritmo*, a *melodia* e a *harmonia*:
+[text|bodyText2] • O *ritmo* se define como a duração e acentuação dos sons e pausas;
+[text|bodyText2] • A *melodia* como a sucessão de sons musicais;
+[text|bodyText2] • A *harmonia* como a combinação dos sons, sendo reproduzidos simultaneamente;
+[text|bodyText2]A seguir, apresentam-se três áudios que reproduzem, respectivamente, a *harmonia*, *melodia* e *ritmo* de uma música.
+[audio]Áudio da harmonia de uma música|harmony.mp3
+[audio]Áudio da melodia de uma música|melody.mp3
+[audio]Áudio do ritmo de uma música|rhythm.mp3
+[text|bodyText2]Juntas, elas compõem o seguinte trecho musical:
+[audio]joined_audio.mp3
+[text|bodyText2]Com estes três pilares, é possível identificar o papel dos instrumentos na música, uma vez que percebemos que, na maioria das vezes, a voz do cantor reproduz a *melodia*, cantando uma nota por vez; o violão faz a *harmonia*, tocando seis cordas diferentes simultaneamente; e a bateria dita o *ritmo*, aplicando intensidades diferentes com batidas em uma sucessão organizada.

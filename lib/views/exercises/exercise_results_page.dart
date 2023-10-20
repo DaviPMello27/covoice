@@ -28,6 +28,13 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
   bool loaded = false;
   int numStars = 0;
 
+  Future<void> updateExercise() async {
+    if(widget.state.score > widget.state.exercise.maxScore){
+      widget.state.exercise.maxScore = min(widget.state.exercise.maxPossibleScore, widget.state.score.round());
+      await Exercise.save(widget.state.exercise);
+    }
+  }
+
   @override
   void initState() {
     widget.state.recording = false;
@@ -35,8 +42,10 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
     
     numStars = widget.state.exercise.getNumStars();
 
-    setState(() {
-      loaded = true;
+    updateExercise().then((_){
+      setState(() {
+        loaded = true;
+      });
     });
 
     super.initState();
@@ -46,7 +55,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercise'),
+        title: const Text('Resultados'),
       ),
       body: Builder(
         builder: (context) {
@@ -54,13 +63,14 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
             return SingleChildScrollView(
               child: Column(
                 children: [
+                  const SizedBox(height: 40),
                   Text(
-                    'Exercise ${widget.number}',
+                    'Exercício ${widget.number}',
                     style: Theme.of(context).textTheme.headline3,
                   ),
                   SizedBox(
                     width: WidthProportion.of(context).half,
-                    child: const Divider(color: Color.fromARGB(255, 178, 215, 232)),
+                    child: Divider(color: Theme.of(context).colorScheme.secondary),
                   ),
                   Text(
                     widget.state.exercise.module[0].toUpperCase() + widget.state.exercise.module.substring(1),
@@ -76,9 +86,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (i){
                       double fiveStarsScore = widget.state.exercise.maxPossibleScore * (1-Exercise.maxScoreTolerance);
-                      double currentScoreThreshold = fiveStarsScore / 5 * (i+1);
-
-                    
+                      double currentScoreThreshold = fiveStarsScore / 5 * (i+1);                    
 
                       return Transform.translate(
                         offset: Offset(
@@ -90,7 +98,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                           child: Icon(
                             Icons.star,
                             size: 64,
-                            color: widget.state.score >= currentScoreThreshold ? Colors.yellow : Theme.of(context).colorScheme.secondaryVariant,
+                            color: widget.state.score >= currentScoreThreshold ? CovoiceTheme.customColors.of(context).gold : Theme.of(context).colorScheme.secondaryVariant,
                           ),
                         ),
                       );
@@ -121,7 +129,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                     children: [
                       Flexible(
                         child: _ExerciseResultsPageButton(
-                          'Return', 
+                          'Voltar', 
                           icon: Icons.arrow_back, 
                           onTap: (){
                             int count = 2;
@@ -131,7 +139,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                       ),
                       Flexible(
                         child: _ExerciseResultsPageButton(
-                          'Retry',
+                          'Repetir',
                           icon: Icons.replay_rounded,
                           onTap: (){
                             widget.state.reset();

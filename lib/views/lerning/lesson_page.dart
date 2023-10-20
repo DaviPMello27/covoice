@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:covoice/entities/lesson.dart';
+import 'package:covoice/entities/lesson_module.dart';
 import 'package:covoice/views/record/widgets/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,7 @@ class _LessonAudio {
 }
 
 class LessonPage extends StatefulWidget {
-  final Lesson module;
+  final LessonModule module;
   final Lesson lesson;
 
   const LessonPage({required this.module, required this.lesson, Key? key }) : super(key: key);
@@ -30,6 +31,52 @@ class _LessonPageState extends State<LessonPage> {
   bool loaded = false;
   final List<_LessonAudio> audios = [];
   final List<Widget> content = [];
+
+  Text formatText(TextStyle style, String text){
+    List<TextSpan> textSpans = [];
+    String accumulatingString = '';
+    bool bold = false;
+    bool italic = false;
+
+    for(int i = 0; i < text.length; i++){
+      FontWeight? fontWeight = (style.fontWeight == FontWeight.normal) ? (bold ? FontWeight.bold : FontWeight.normal) : style.fontWeight;
+      FontStyle? fontStyle = italic ? FontStyle.italic : FontStyle.normal;
+      String char = text[i];
+      if(['*','_'].contains(char)){
+        if(accumulatingString.isNotEmpty){
+          textSpans.add(
+            TextSpan(
+              text: accumulatingString,
+              style: style.copyWith(fontStyle: fontStyle, fontWeight: fontWeight)
+            )
+          );
+          accumulatingString = '';
+        }
+        if(char == '*'){
+          bold = !bold;
+        } else if (char == '_'){
+          italic = !italic;
+        }
+      } else {
+        accumulatingString += char;
+      }
+    }
+
+    textSpans.add(
+      TextSpan(
+        text: accumulatingString,
+        style: style,
+      )
+    );
+
+    return Text.rich(
+      TextSpan(
+        style: style,
+        children: textSpans
+      ),
+      textAlign: TextAlign.justify,
+    );
+  }
 
   void loadImage(String lessonPath, String imageContent){
     List<String> separatedImageContent = imageContent.split('|');
@@ -44,14 +91,16 @@ class _LessonPageState extends State<LessonPage> {
     content.add(
       Padding(
         padding: hasCaption ? const EdgeInsets.only(top: 20, bottom: 5) : const EdgeInsets.symmetric(vertical: 20),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).colorScheme.secondaryVariant,
-              width: 2
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.secondaryVariant,
+                width: 2
+              ),
             ),
+            child: Image.asset(imagePath),
           ),
-          child: Image.asset(imagePath),
         )
       )
     );
@@ -60,9 +109,11 @@ class _LessonPageState extends State<LessonPage> {
       content.add(
         Padding(
           padding: const EdgeInsets.only(bottom: 15),
-          child: Text(
-            separatedImageContent.first,
-            style: Theme.of(context).textTheme.caption,
+          child: Center(
+            child: Text(
+              separatedImageContent.first,
+              style: Theme.of(context).textTheme.caption,
+            ),
           )
         )
       );
@@ -76,11 +127,7 @@ class _LessonPageState extends State<LessonPage> {
         content.add(
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              textContent,
-              style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.justify,
-            ),
+            child: formatText(Theme.of(context).textTheme.bodyText2!, textContent),
           )
         );
         break;
@@ -88,19 +135,22 @@ class _LessonPageState extends State<LessonPage> {
         content.add(
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              textContent,
-              style: Theme.of(context).textTheme.headline3,
-              textAlign: TextAlign.justify,
-            ),
+            child: Center(child: formatText(Theme.of(context).textTheme.headline3!, textContent)),
           )
         );
         break;
     }
   }
 
-  Future loadAudio(String path) async {
-    ByteData audioData = await rootBundle.load(path);
+  Future loadAudio(String lessonPath, String audioContent) async {
+    List<String> separatedAudioContent = audioContent.split('|');
+    if(separatedAudioContent.length > 2){
+      throw Exception('Bad formatting on audio statement: $audioContent');
+    }
+
+    bool hasCaption = separatedAudioContent.length == 2;
+
+    ByteData audioData = await rootBundle.load(hasCaption ? '$lessonPath/${separatedAudioContent.last}' : '$lessonPath/${separatedAudioContent.first}');
     
     Directory tempPath = await getTemporaryDirectory();
     
@@ -117,11 +167,30 @@ class _LessonPageState extends State<LessonPage> {
     audios.add(_LessonAudio(controller: controller, tempFile: tempFile));
 
     content.add(
-      Player(
-        controller: controller,
-        shareablePath: tempFile.path,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Center(
+          child: Player(
+            controller: controller,
+            shareablePath: tempFile.path,
+          ),
+        ),
       )
     );
+
+    if(hasCaption){
+      content.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: Center(
+            child: Text(
+              separatedAudioContent.first,
+              style: Theme.of(context).textTheme.caption,
+            ),
+          )
+        )
+      );
+    }
   }
 
   Future loadContent() async {
@@ -137,7 +206,7 @@ class _LessonPageState extends State<LessonPage> {
           loadImage(lessonPath, textContent);
           break;
         case "audio":
-          await loadAudio('$lessonPath/$textContent');
+          await loadAudio(lessonPath, textContent);
           break;
         case "text|bodyText2":
         case "text|headline3":
@@ -147,27 +216,31 @@ class _LessonPageState extends State<LessonPage> {
     }
 
     content.add(
-      TextButton( //TODO: New component
-        onPressed: (){
-          //TODO: Mark as finished
-          Navigator.pop(context);
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              String.fromCharCode(Icons.check.codePoint),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.background,
-                fontSize: 32.0,
-                fontWeight: FontWeight.w900,
-                fontFamily: Icons.check.fontFamily,
-                package: Icons.check.fontPackage,
+      Padding(
+        padding: const EdgeInsets.only(top: 30, bottom: 10),
+        child: TextButton( //TODO: New component
+          onPressed: () async {
+            //TODO: Loading indicator in the button itself
+            await widget.lesson.markAsFinished();
+            Navigator.pop(context);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                String.fromCharCode(Icons.check.codePoint),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.background,
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: Icons.check.fontFamily,
+                  package: Icons.check.fontPackage,
+                ),
               ),
-            ),
-            const Text('Marcar como finalizado')
-          ],
-        )
+              const Text('Marcar como finalizado')
+            ],
+          )
+        ),
       )
     );
 
@@ -190,6 +263,7 @@ class _LessonPageState extends State<LessonPage> {
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: content,
           ),
         ),

@@ -1,34 +1,80 @@
 import 'package:covoice/entities/exercise.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
+import 'package:covoice/views/themes.dart';
 import 'package:flutter/material.dart';
 
-class ExerciseModulesListPage  extends StatelessWidget {
+class ExerciseModulesListPage  extends StatefulWidget {
   const ExerciseModulesListPage ({ Key? key }) : super(key: key);
+
+  @override
+  State<ExerciseModulesListPage> createState() => _ExerciseModulesListPageState();
+}
+
+class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
+  bool loaded = false;
+  Map<String, List<Exercise>>? modules;
+
+  Future<Map<String, List<Exercise>>> loadModules() {
+    return Exercise.findAllGroupByModule();
+  }
+
+  void loadModulesAndUpdateState(){
+    setState(() {
+      loaded = false;
+    });
+    loadModules().then(
+      (result){
+        setState(() {
+          modules = result;
+          loaded = true;
+        });
+      }
+    );
+  }
+
+  void resetMaxScore() {
+    setState(() {
+      loaded = false;
+    });
+    Exercise.resetMaxScore().then((value){
+      loadModulesAndUpdateState();
+    });
+  }
+
+  @override
+  void initState() {
+    loadModulesAndUpdateState();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Modules'),
+        title: const Text('Módulos'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: (){
+              resetMaxScore();
+            }
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
+      body: (loaded && modules != null) ? SingleChildScrollView(
         child: Column(
-          children: [
-            _ExerciseModuleListTile(
-              title: 'Amateur',
-              exercises: Exercise.covoiceExerciseInitializationList.where((e) => e.module == 'amateur').toList()
-            ),
-            _ExerciseModuleListTile(
-              title: 'Intermediary',
-              exercises: Exercise.covoiceExerciseInitializationList.where((e) => e.module == 'intermediary').toList()
-            ),
-            _ExerciseModuleListTile(
-              title: 'Professional',
-              exercises: Exercise.covoiceExerciseInitializationList.where((e) => e.module == 'professional').toList()
-            ),
-          ],
+          children: modules!.entries.map(
+            (entry) => _ExerciseModuleListTile(
+              title: Exercise.translateModule(entry.key)[0].toUpperCase() + Exercise.translateModule(entry.key).substring(1),
+              exercises: entry.value,
+              inDevelopment: ['intermediary', 'professional'].contains(entry.key),
+              onReturn: (){
+                loadModulesAndUpdateState();
+              }
+            )
+          ).toList(),
         ),
-      ),
+      ) : const Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -39,8 +85,10 @@ class _ExerciseModuleListTile extends StatelessWidget {
   late final double completionRate;
   final String title;
   final List<Exercise> exercises;
+  final bool inDevelopment;
+  final void Function()? onReturn;
 
-  _ExerciseModuleListTile({required this.title, required this.exercises, Key? key }) : super(key: key) {
+  _ExerciseModuleListTile({required this.title, required this.exercises, this.inDevelopment = false, this.onReturn, Key? key }) : super(key: key) {
     maxStars = exercises.length * 5;
     int starCounter = 0;
     for(Exercise exercise in exercises){
@@ -52,15 +100,19 @@ class _ExerciseModuleListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5);
-    Color medalColor = Colors.brown;    
+    final BorderSide verticalBorder = BorderSide(
+      color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
+      width: 0.5
+    );
+
+    Color medalColor = CovoiceTheme.customColors.of(context).bronze;    
     
     if(completionRate == 1){
-      medalColor = Colors.lightBlue;
+      medalColor = CovoiceTheme.customColors.of(context).platinum;
     } else if(completionRate >= 0.8){
-      medalColor = Colors.yellowAccent;
+      medalColor = CovoiceTheme.customColors.of(context).gold;
     } else if(completionRate >= 0.4){
-      medalColor = Colors.grey;
+      medalColor = CovoiceTheme.customColors.of(context).silver;
     }
 
     return Padding(
@@ -69,15 +121,17 @@ class _ExerciseModuleListTile extends StatelessWidget {
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         trailing: Icon(
           Icons.chevron_right, 
-          color: Theme.of(context).colorScheme.secondary,
+          color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
         ),
         title: Text(
-          title,
+          title + (inDevelopment ? ' - Em desenvolvimento' : ''),
           style: const TextStyle(
             fontSize: 18
           )
         ),
-        leading: Row(
+        leading: inDevelopment ? 
+          Icon(Icons.lock, color: Theme.of(context).colorScheme.secondaryVariant)
+        : Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
@@ -88,7 +142,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
                 color: medalColor,
                 border: Border.all(
                   width: 1, 
-                  color: Theme.of(context).colorScheme.background
+                  color: Theme.of(context).colorScheme.secondaryVariant
                 ),
               ),
             ),
@@ -99,8 +153,9 @@ class _ExerciseModuleListTile extends StatelessWidget {
             ),
           ],
         ),
-        onTap: (){
-          Navigator.push(
+        enabled: !inDevelopment,
+        onTap: () async {
+          await Navigator.push(
             context, 
             MaterialPageRoute(
               builder: (context) => ExercisesListPage(
@@ -109,6 +164,10 @@ class _ExerciseModuleListTile extends StatelessWidget {
               ),
             ),
           );
+
+          if(onReturn != null){
+            onReturn!();
+          }
         },
       ),
     );
