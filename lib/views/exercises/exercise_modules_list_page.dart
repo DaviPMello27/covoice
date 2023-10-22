@@ -67,7 +67,7 @@ class _ExerciseModulesListPageState extends State<ExerciseModulesListPage> {
             (entry) => _ExerciseModuleListTile(
               title: Exercise.translateModule(entry.key)[0].toUpperCase() + Exercise.translateModule(entry.key).substring(1),
               exercises: entry.value,
-              inDevelopment: ['intermediary', 'professional'].contains(entry.key),
+              inDevelopment: ['professional'].contains(entry.key),
               onReturn: (){
                 loadModulesAndUpdateState();
               }

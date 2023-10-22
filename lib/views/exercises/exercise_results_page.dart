@@ -73,7 +73,7 @@ class _ExercisePageState extends State<ExerciseResultsPage> {
                     child: Divider(color: Theme.of(context).colorScheme.secondary),
                   ),
                   Text(
-                    widget.state.exercise.module[0].toUpperCase() + widget.state.exercise.module.substring(1),
+                    Exercise.translateModule(widget.state.exercise.module)[0].toUpperCase() + Exercise.translateModule(widget.state.exercise.module).substring(1),
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                   const SizedBox(height: 20),

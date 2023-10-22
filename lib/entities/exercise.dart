@@ -116,6 +116,7 @@ class Exercise {
   }
 
   static final List<Exercise> covoiceExerciseInitializationList = [
+    //Amateur
     Exercise(
       maxScore: 0,
       title: 'Teste de uma nota: A',
@@ -138,28 +139,30 @@ class Exercise {
       maxPossibleScore: 640,
     ),
 
+    //Intermediary
     Exercise(
       maxScore: 0,
-      title: 'Happy Birthday to You',
+      title: 'Segunda voz de melodia simples',
       module: 'intermediary',
-      folderName: '',
+      folderName: '/simple_melody_vocal_harmony',
+      maxPossibleScore: 600,
+    ),
+    Exercise(
+      maxScore: 0,
+      title: 'We Wish you a Merry Christmas',
+      module: 'intermediary',
+      folderName: 'we_wish_you_a_merry_christmas',
       maxPossibleScore: 999,
     ),
     Exercise(
       maxScore: 0,
-      title: 'Jingle Bells',
+      title: 'Como é Grande o Meu Amor por Você',
       module: 'intermediary',
-      folderName: '',
-      maxPossibleScore: 999,
-    ),
-    Exercise(
-      maxScore: 0,
-      title: 'O Holy Night',
-      module: 'intermediary',
-      folderName: '',
-      maxPossibleScore: 999,
+      folderName: '/roberto_carlos_como_e_grande',
+      maxPossibleScore: 1250,
     ),
 
+    //Professional
     Exercise(
       maxScore: 0,
       title: 'Song 1',

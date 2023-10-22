@@ -31,11 +31,17 @@ class Boundary extends PositionComponent with HasGameRef {
     double remainingSpace = verticalSize - (Boundary.noteLabelHeight * 2) - noteScopeSize;
 
     while(remainingSpace > 0){
-      notes.add(GameNote.range[GameNote.range.indexOf(notes.last) + 1]);
+      int nextUpperNoteIndex = GameNote.range.indexOf(notes.last) + 1;
+      if(nextUpperNoteIndex < GameNote.range.length){
+        notes.add(GameNote.range[nextUpperNoteIndex]);
+      }
       remainingSpace -= Boundary.noteLabelHeight;
 
+      int nextLowerNoteIndex = GameNote.range.indexOf(notes.first) - 1;
       if(remainingSpace > 0){
-        notes = [GameNote.range[GameNote.range.indexOf(notes.first) - 1], ...notes];
+        if(nextLowerNoteIndex >= 0){
+          notes = [GameNote.range[nextLowerNoteIndex], ...notes];
+        }
         remainingSpace -= Boundary.noteLabelHeight;
       }
     }
