@@ -74,6 +74,7 @@ class RecordingModel implements IRecordingModel {
     await requestRecordingPermission();
 
     if(_voiceProcessor != null){
+      _voiceProcessor!.clearFrameListeners();
       _voiceProcessor!.addFrameListener((frame) {
         PitchDetectorResult result = pitchDetector.getPitch(frame.map((e) => e.toDouble()).toList());
         onFrequencyChanged(result.pitch);
@@ -81,26 +82,6 @@ class RecordingModel implements IRecordingModel {
 
       _voiceProcessor!.start(sampleSize, sampleRate.toInt());
     }
-
-    /* await audioCapture.start(
-      (obj){
-        var buffer = Float64List.fromList(obj.cast<double>());
-
-        print(obj.length);
-        //print(buffer.length);
-
-        /* final List<double> audioSample = buffer.toList();
-        PitchDetectorResult result = pitchDetector.getPitch(audioSample);
-        print('note: ${musicModel.getNearestNote(result.pitch)}, frequency: ${result.pitch}, probability: ${result.probability}');
-        if(result.probability < 0.8){
-          return -1.0;
-        } 
-        onFrequencyChanged(result.pitch); */
-      },
-      (error) => {log('error!')},
-      sampleRate: sampleRate.toInt(),
-      bufferSize: sampleSize,
-    ); */
   }
 
   @override

@@ -13,6 +13,36 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
   late double positionOffset;
   VoiceIndicator({required this.note, required this.state}) : super();
 
+  //TODO: Remove when there's no more need to count maximum score
+  double totalScore = 0;
+
+  void drawVoiceIndicator(double height, Color color){
+    double wholeComponentHeight = Boundary.noteLabelHeight;
+    add(
+      CircleComponent(
+        position: Vector2(gameRef.size.x * 0.15 - 4, height - (wholeComponentHeight / 2)),
+        radius: 4,
+        paint: Paint()..color = color,
+      )
+    );
+
+    add(
+      RectangleComponent(
+        position: Vector2(gameRef.size.x * 0.15 - 4, height - (wholeComponentHeight / 2) + 4),
+        size: Vector2(8, wholeComponentHeight),
+        paint: Paint()..color = color,
+      )
+    );
+
+    add(
+      CircleComponent(
+        position: Vector2(gameRef.size.x * 0.15 - 4, height + (wholeComponentHeight / 2)),
+        radius: 4,
+        paint: Paint()..color = color,
+      )
+    );
+  }
+
   @override
   Future<void>? onLoad() {
     Color trueVoiceIndicatorColor = Theme.of(state.context).colorScheme.onSecondary;
@@ -25,55 +55,18 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
       .withGreen((trueVoiceIndicatorColor.green * 0.4).round())
       .withBlue((trueVoiceIndicatorColor.blue * 0.4).round());
 
+    //TODO: Adapt calculations to fit to smaller screens
     int initialNotePosition = GameNote.range.indexOf(state.displayedNotes.last);
     int defaultNotePosition = GameNote.range.indexOf('F3');
     int noteOffset = defaultNotePosition - initialNotePosition;
     positionOffset = (2660 + Boundary.noteLabelHeight * noteOffset) + noteOffset * 2;
 
-    //two octaves lower
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, Boundary.noteLabelHeight * 24),
-        radius: 7,
-        paint: Paint()..color = twoOctavesVoiceIndicatorColor,
-      )
-    );
+    drawVoiceIndicator(Boundary.noteLabelHeight * 24, twoOctavesVoiceIndicatorColor);
+    drawVoiceIndicator(Boundary.noteLabelHeight * 12, oneOctaveVoiceIndicatorColor);
+    drawVoiceIndicator(0, trueVoiceIndicatorColor);
+    drawVoiceIndicator(-Boundary.noteLabelHeight * 12, oneOctaveVoiceIndicatorColor);
+    drawVoiceIndicator(-Boundary.noteLabelHeight * 24, twoOctavesVoiceIndicatorColor);
 
-    //one octave lower
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, Boundary.noteLabelHeight * 12),
-        radius: 7,
-        paint: Paint()..color = oneOctaveVoiceIndicatorColor,
-      )
-    );
-
-    //actual frequency
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, 0),
-        radius: 7,
-        paint: Paint()..color = trueVoiceIndicatorColor,
-      )
-    );
-
-    //one octave higher
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, -Boundary.noteLabelHeight * 12),
-        radius: 7,
-        paint: Paint()..color = oneOctaveVoiceIndicatorColor,
-      )
-    );
-
-    //two octaves higher
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, -Boundary.noteLabelHeight * 24),
-        radius: 7,
-        paint: Paint()..color = twoOctavesVoiceIndicatorColor,
-      )
-    );
     return super.onLoad();
   }
 
@@ -93,8 +86,12 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
 
       position.y = positionY;
 
-      GameNote? currentNote = state.getCurrentNote();
+      GameNote? currentNote = state.getCurrentCountingNote();
       if(currentNote != null){
+        //TODO: Remove when there's no more need to count maximum score
+        totalScore += dt * 100;
+        //print(totalScore);
+
         double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * state.displayedNotes.indexOf(currentNote.note));
 
         List<double> voiceIndicatorPositions = [

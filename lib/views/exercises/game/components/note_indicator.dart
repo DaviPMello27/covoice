@@ -10,8 +10,9 @@ class NoteIndicator extends RectangleComponent with HasGameRef {
   double duration;
   Vector2 pos;
   ExerciseGameState state;
+  bool counts;
 
-  NoteIndicator({required this.pos, required this.duration, required this.state}) : super();
+  NoteIndicator({required this.pos, required this.duration, required this.state, required this.counts}) : super();
   
   @override
   Future<void>? onLoad() {
@@ -19,7 +20,7 @@ class NoteIndicator extends RectangleComponent with HasGameRef {
       RectangleComponent(
         position: pos,
         size: Vector2(duration, Boundary.noteLabelHeight - 10),
-        paint: Paint()..color = Theme.of(state.context).colorScheme.secondary,
+        paint: Paint()..color = counts ? Theme.of(state.context).colorScheme.secondary : Theme.of(state.context).colorScheme.secondaryVariant.withAlpha(64),
       )
     );
     return super.onLoad();
@@ -43,6 +44,6 @@ class NoteIndicator extends RectangleComponent with HasGameRef {
 
     double width = (note.end / 10) - (note.start / 10);
     
-    return NoteIndicator(pos: transformedPosition, duration: width, state: state);
+    return NoteIndicator(pos: transformedPosition, duration: width, state: state, counts: note.counts);
   }
 }

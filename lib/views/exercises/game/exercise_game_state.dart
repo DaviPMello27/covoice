@@ -30,9 +30,9 @@ class ExerciseGameState {
     timeElapsedInMilliseconds = 0;
   }
 
-  GameNote? getCurrentNote(){
+  GameNote? getCurrentCountingNote(){
     try {
-      return notes.firstWhere((note) => note.start < timeElapsedInMilliseconds && timeElapsedInMilliseconds < note.end);
+      return notes.firstWhere((note) => note.counts && note.start < timeElapsedInMilliseconds && timeElapsedInMilliseconds < note.end);
     } catch (error){
       return null;
     }

@@ -33,14 +33,13 @@ class _ExercisePageState extends State<ExercisePage> {
   Future loadExerciseNoteStrings() async {
     String exercisePath = widget.exercise.getFullPath;
     String fileString = await rootBundle.loadString('$exercisePath/notes');
-    //gameNotes = LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList();
 
     setState(() {
       state = ExerciseGameState(
         context: context,
         exercise: widget.exercise,
         sangNote: Note(time: 0, frequency: double.infinity),
-        notes: LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList(),
+        notes: LineSplitter.split(fileString).toList().where((text) => text.isNotEmpty).map((string) => GameNote.fromString(string)).toList(),
         playing: false,
         recording: false,
       );
