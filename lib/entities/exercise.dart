@@ -122,7 +122,7 @@ class Exercise {
       title: 'Teste de uma nota: A',
       module: 'amateur',
       folderName: '/single_note_test_a',
-      maxPossibleScore: 250,
+      maxPossibleScore: 500,
     ),
     Exercise(
       maxScore: 0,
@@ -151,8 +151,8 @@ class Exercise {
       maxScore: 0,
       title: 'We Wish you a Merry Christmas',
       module: 'intermediary',
-      folderName: 'we_wish_you_a_merry_christmas',
-      maxPossibleScore: 999,
+      folderName: '/we_wish_you_a_merry_christmas',
+      maxPossibleScore: 1030,
     ),
     Exercise(
       maxScore: 0,
