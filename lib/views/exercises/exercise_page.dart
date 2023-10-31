@@ -33,14 +33,13 @@ class _ExercisePageState extends State<ExercisePage> {
   Future loadExerciseNoteStrings() async {
     String exercisePath = widget.exercise.getFullPath;
     String fileString = await rootBundle.loadString('$exercisePath/notes');
-    //gameNotes = LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList();
 
     setState(() {
       state = ExerciseGameState(
         context: context,
         exercise: widget.exercise,
-        note: Note(time: 0, frequency: double.infinity),
-        notes: LineSplitter.split(fileString).toList().map((string) => GameNote.fromString(string)).toList(),
+        sangNote: Note(time: 0, frequency: double.infinity),
+        notes: LineSplitter.split(fileString).toList().where((text) => text.isNotEmpty).map((string) => GameNote.fromString(string)).toList(),
         playing: false,
         recording: false,
       );
@@ -85,7 +84,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       state: state,
                       onEndPlaying: (){
                         setState(() {
-                          state.note.frequency = double.infinity;
+                          state.sangNote.frequency = double.infinity;
                           state.playing = false;
                           state.recording = false;
                         });
@@ -96,7 +95,7 @@ class _ExercisePageState extends State<ExercisePage> {
                           MaterialPageRoute(builder: (context) => ExerciseResultsPage(state: state, number: widget.number))
                         );
                         setState(() {
-                          state.note.frequency = double.infinity;
+                          state.sangNote.frequency = double.infinity;
                           state.playing = false;
                           state.recording = false;
                         });
@@ -118,14 +117,14 @@ class _ExercisePageState extends State<ExercisePage> {
                           recordingController.startRecordingStreamWithoutStoring(
                             (frequency){
                               if(frequency != -1.0 && frequency > 100 && frequency < 800){
-                                state.note.frequency = frequency;
+                                state.sangNote.frequency = frequency;
                               }
                             },
                           );
                         } else {
                           setState(() {
                             state.score = 0;
-                            state.note.frequency = double.infinity;
+                            state.sangNote.frequency = double.infinity;
                           });
                           recordingController.stopRecordingStreamWithoutStoring();
                         }
@@ -147,7 +146,7 @@ class _ExercisePageState extends State<ExercisePage> {
                     onPressed: (){
                       if(!state.recording){
                         setState(() {
-                          state.note.frequency = double.infinity;
+                          state.sangNote.frequency = double.infinity;
                           state.playing = !state.playing;
                         });
                       }

@@ -57,7 +57,7 @@ class _LessonModulesListPageState extends State<LessonModulesListPage> {
       body: SingleChildScrollView(
         child: loaded ? Column(
           children: modules!.map(
-            (module) => _ModuleListTile(module: module)
+            (module) => _ModuleListTile(module: module, inDevelopment: [2].contains(module.id),)
           ).toList(),
         ) : const Center(child: CircularProgressIndicator(),),
       ),
@@ -67,27 +67,32 @@ class _LessonModulesListPageState extends State<LessonModulesListPage> {
 
 class _ModuleListTile extends StatelessWidget {
   final LessonModule module;
+  final bool inDevelopment;
 
-  const _ModuleListTile({ required this.module, Key? key }) : super(key: key);
+  const _ModuleListTile({ required this.module, this.inDevelopment = false, Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final BorderSide verticalBorder = BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5);
+    final BorderSide verticalBorder = BorderSide(
+      width: 0.5,
+      color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
+    );
 
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: ListTile(
         shape: Border(top: verticalBorder, bottom: verticalBorder),
         title: Text(
-          '${module.id}. ${module.title}',
+          '${module.id}. ${module.title}' + (inDevelopment ? ' - Em desenvolvimento' : ''),
           style: const TextStyle(
             fontSize: 18
           )
         ),
         trailing: Icon(
           Icons.chevron_right, 
-          color: Theme.of(context).colorScheme.secondary
+          color: inDevelopment ? Theme.of(context).colorScheme.secondaryVariant : Theme.of(context).colorScheme.secondary,
         ),
+        enabled: !inDevelopment,
         onTap: () {
           Navigator.push(
             context,

@@ -10,7 +10,38 @@ import 'package:flutter/material.dart';
 class VoiceIndicator extends PositionComponent with HasGameRef {
   ExerciseGameState state;
   Note note;
+  late double positionOffset;
   VoiceIndicator({required this.note, required this.state}) : super();
+
+  //TODO: Remove when there's no more need to count maximum score
+  double totalScore = 0;
+
+  void drawVoiceIndicator(double height, Color color){
+    double wholeComponentHeight = Boundary.noteLabelHeight;
+    add(
+      CircleComponent(
+        position: Vector2(gameRef.size.x * 0.15 - 4, height - (wholeComponentHeight / 2)),
+        radius: 4,
+        paint: Paint()..color = color,
+      )
+    );
+
+    add(
+      RectangleComponent(
+        position: Vector2(gameRef.size.x * 0.15 - 4, height - (wholeComponentHeight / 2) + 4),
+        size: Vector2(8, wholeComponentHeight),
+        paint: Paint()..color = color,
+      )
+    );
+
+    add(
+      CircleComponent(
+        position: Vector2(gameRef.size.x * 0.15 - 4, height + (wholeComponentHeight / 2)),
+        radius: 4,
+        paint: Paint()..color = color,
+      )
+    );
+  }
 
   @override
   Future<void>? onLoad() {
@@ -24,64 +55,44 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
       .withGreen((trueVoiceIndicatorColor.green * 0.4).round())
       .withBlue((trueVoiceIndicatorColor.blue * 0.4).round());
 
-    //two octaves lower
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, Boundary.noteLabelHeight * 24),
-        radius: 7,
-        paint: Paint()..color = twoOctavesVoiceIndicatorColor,
-      )
-    );
+    //TODO: Adapt calculations to fit to smaller screens
+    int initialNotePosition = GameNote.range.indexOf(state.displayedNotes.last);
+    int defaultNotePosition = GameNote.range.indexOf('F3');
+    int noteOffset = defaultNotePosition - initialNotePosition;
+    positionOffset = (2660 + Boundary.noteLabelHeight * noteOffset) + noteOffset * 2;
 
-    //one octave lower
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, Boundary.noteLabelHeight * 12),
-        radius: 7,
-        paint: Paint()..color = oneOctaveVoiceIndicatorColor,
-      )
-    );
+    drawVoiceIndicator(Boundary.noteLabelHeight * 24, twoOctavesVoiceIndicatorColor);
+    drawVoiceIndicator(Boundary.noteLabelHeight * 12, oneOctaveVoiceIndicatorColor);
+    drawVoiceIndicator(0, trueVoiceIndicatorColor);
+    drawVoiceIndicator(-Boundary.noteLabelHeight * 12, oneOctaveVoiceIndicatorColor);
+    drawVoiceIndicator(-Boundary.noteLabelHeight * 24, twoOctavesVoiceIndicatorColor);
 
-    //actual frequency
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, 0),
-        radius: 7,
-        paint: Paint()..color = trueVoiceIndicatorColor,
-      )
-    );
-
-    //one octave higher
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, -Boundary.noteLabelHeight * 12),
-        radius: 7,
-        paint: Paint()..color = oneOctaveVoiceIndicatorColor,
-      )
-    );
-
-    //two octaves higher
-    add(
-      CircleComponent(
-        position: Vector2(gameRef.size.x * 0.15 - 7, -Boundary.noteLabelHeight * 24),
-        radius: 7,
-        paint: Paint()..color = twoOctavesVoiceIndicatorColor,
-      )
-    );
     return super.onLoad();
   }
 
   double logBase(num x, num base) => log(x) / log(base);
 
+  //TODO: Improve these calculations. Maybe change the logic.
+  double calculateVoiceIndicatorPosition(){
+    double logMultiplier = 360; //360 so the difference between the notes is always 30 (Boundary.noteLabelHeight)
+    
+    return gameRef.size.y - ((logBase(note.getFrequency!, 2) * logMultiplier) - positionOffset);
+  }
+
   @override
   void update(double dt) {
     if((note.getFrequency ?? 0) > 0){
-      double positionY = gameRef.size.y - ((logBase(note.getFrequency!, 2) * 360) - 2660); //TODO: documentate or calculate 2660
+      double positionY = calculateVoiceIndicatorPosition();
+
       position.y = positionY;
 
-      GameNote? currentNote = state.getCurrentNote();
+      GameNote? currentNote = state.getCurrentCountingNote();
       if(currentNote != null){
-        double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * GameNote.range.indexOf(currentNote.note));
+        //TODO: Remove when there's no more need to count maximum score
+        totalScore += dt * 100;
+        //print(totalScore);
+
+        double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * state.displayedNotes.indexOf(currentNote.note));
 
         List<double> voiceIndicatorPositions = [
           positionY - Boundary.noteLabelHeight * 24,
