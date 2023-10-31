@@ -34,7 +34,7 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Covoice',
       darkTheme: CovoiceTheme.dark,
-      theme: CovoiceTheme.dark,
+      theme: CovoiceTheme.light,
       home: home,
     );
   }

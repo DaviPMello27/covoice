@@ -23,9 +23,9 @@ class FFmpegModel implements IFFmpegModel {
         ffmpegQuery = ffmpegQuery.substring(0, ffmpegQuery.length - 1); //remove last ;
         ffmpegQuery += '" -map [$ffmpegVariable] $resultPath';
       } else {
-        String thirdRatioQuery = 'asetrate=44100*6/5,atempo=5/6'; //minor ratio 6:5
+        String thirdRatioQuery = 'asetrate=43500*6/5,atempo=5/6'; //minor ratio 6:5
         if(musicModel.isMajor(note.getNote!, key)){
-          thirdRatioQuery = 'asetrate=44100*5/4,atempo=4/5'; //major ratio 5:4
+          thirdRatioQuery = 'asetrate=43500*5/4,atempo=4/5'; //major ratio 5:4
         }
         ffmpegQuery += '[0:a]atrim=start=${note.getTime}:duration=${notes[index + 1].getTime - note.getTime},asetpts=PTS-STARTPTS[${++ffmpegVariable}];';
         ffmpegQuery += '[$ffmpegVariable]$thirdRatioQuery[${++ffmpegVariable}];';
