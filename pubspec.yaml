@@ -98,6 +98,8 @@ flutter:
     - assets/exercises/intermediary/simple_melody_vocal_harmony/
     - assets/exercises/intermediary/we_wish_you_a_merry_christmas/
     - assets/exercises/intermediary/roberto_carlos_como_e_grande/
+    
+    - assets/exercises/professional/simple_melody_freestyle/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

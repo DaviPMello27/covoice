@@ -165,12 +165,12 @@ class Exercise {
     //Professional
     Exercise(
       maxScore: 0,
-      title: 'Song 1',
+      title: 'Simple Melody Freestyle',
       module: 'professional',
-      folderName: '',
-      maxPossibleScore: 999,
+      folderName: '/simple_melody_freestyle',
+      maxPossibleScore: 600,
     ),
-    Exercise(
+    /* Exercise(
       maxScore: 0,
       title: 'Song 2',
       module: 'professional',
@@ -183,6 +183,6 @@ class Exercise {
       module: 'professional',
       folderName: '',
       maxPossibleScore: 999,
-    ),
+    ), */
   ];
 }
