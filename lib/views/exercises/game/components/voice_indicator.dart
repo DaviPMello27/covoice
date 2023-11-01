@@ -86,13 +86,11 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
 
       position.y = positionY;
 
-      GameNote? currentNote = state.getCurrentCountingNote();
-      if(currentNote != null){
+      List<GameNote> currentNotes = state.getCurrentCountingNotes();
+      if(currentNotes.isNotEmpty){
         //TODO: Remove when there's no more need to count maximum score
         totalScore += dt * 100;
         //print(totalScore);
-
-        double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * state.displayedNotes.indexOf(currentNote.note));
 
         List<double> voiceIndicatorPositions = [
           positionY - Boundary.noteLabelHeight * 24,
@@ -102,8 +100,14 @@ class VoiceIndicator extends PositionComponent with HasGameRef {
           positionY + Boundary.noteLabelHeight * 24,
         ];
 
-        if(voiceIndicatorPositions.any((pos) => pos > currentNoteHeight && pos < currentNoteHeight + Boundary.noteLabelHeight)){
-          state.score += dt * 100;
+        for(GameNote currentNote in currentNotes){
+          double currentNoteHeight = Boundary.noteLabelHeight + (Boundary.noteLabelHeight * state.displayedNotes.indexOf(currentNote.note));
+
+          if(voiceIndicatorPositions.any((pos) => pos > currentNoteHeight && pos < currentNoteHeight + Boundary.noteLabelHeight)){
+            state.score += dt * 100;
+            break;
+          }
+
         }
       }
     }
