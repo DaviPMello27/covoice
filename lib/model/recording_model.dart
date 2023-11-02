@@ -87,7 +87,12 @@ class RecordingModel implements IRecordingModel {
   @override
   Future stopRecordingStreamWithoutStoring() async {
     //await audioCapture.stop();
-    await _voiceProcessor!.stop();
+    if(_voiceProcessor != null){
+      bool? isRecording = await _voiceProcessor!.isRecording();
+      if(isRecording ?? false){
+        await _voiceProcessor!.stop();
+      }
+    }
     return;
   }
 

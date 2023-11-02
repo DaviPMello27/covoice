@@ -1,4 +1,6 @@
+import 'package:covoice/controller/config_controller.dart';
 import 'package:covoice/entities/exercise.dart';
+import 'package:covoice/model/config_model.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
 import 'package:covoice/views/themes.dart';
 import 'package:flutter/material.dart';
@@ -158,6 +160,7 @@ class _ExerciseModuleListTile extends StatelessWidget {
             context, 
             MaterialPageRoute(
               builder: (context) => ExercisesListPage(
+                configController: ConfigController(ConfigModel()),
                 moduleName: title, 
                 exercises: exercises
               ),

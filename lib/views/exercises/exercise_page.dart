@@ -1,16 +1,21 @@
 import 'dart:convert';
 
+import 'package:covoice/controller/config_controller.dart';
+import 'package:covoice/controller/config_controller_inteface.dart';
 import 'package:covoice/controller/recording_controller.dart';
 import 'package:covoice/entities/exercise.dart';
 import 'package:covoice/entities/game_note.dart';
 import 'package:covoice/entities/note.dart';
+import 'package:covoice/model/config_model.dart';
 import 'package:covoice/model/recording_model.dart';
 import 'package:covoice/views/exercises/exercise_results_page.dart';
 import 'package:covoice/views/exercises/exercises_list_page.dart';
 import 'package:covoice/views/exercises/game/exercise_game.dart';
 import 'package:covoice/views/exercises/game/exercise_game_state.dart';
+import 'package:covoice/views/exercises/tutorial_page.dart';
 import 'package:covoice/views/themes.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,7 +23,7 @@ class ExercisePage extends StatefulWidget {
   final int number;
   final Exercise exercise;
 
-  const ExercisePage ({ required this.exercise, required this.number, Key? key }) : super(key: key);
+  const ExercisePage({ required this.exercise, required this.number, Key? key }) : super(key: key);
 
   @override
   State<ExercisePage> createState() => _ExercisePageState();
@@ -58,6 +63,22 @@ class _ExercisePageState extends State<ExercisePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercício'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline),
+            onPressed: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => TutorialPage(
+                  configController: ConfigController(ConfigModel()),
+                  onFinish: (){
+                    Navigator.of(context).pop();
+                  },
+                  displayCheckbox: false,
+                ))
+              );
+            }
+          )
+        ],
       ),
       body: loaded ? Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -163,5 +184,14 @@ class _ExercisePageState extends State<ExercisePage> {
         ),
       ) : const Center(child: CircularProgressIndicator(),)
     );
+  }
+
+  @override
+  void dispose() {
+    recordingController.stopRecordingStreamWithoutStoring();
+    if(FlameAudio.bgm.isPlaying){
+      FlameAudio.bgm.stop();
+    }
+    super.dispose();
   }
 }
