@@ -152,6 +152,10 @@ abstract class CovoiceTheme {
           )
         ),
         disabledColor: _lightColorScheme.secondaryVariant,
+        checkboxTheme: CheckboxThemeData(
+          checkColor: MaterialStateProperty.all(_lightColorScheme.background),
+          fillColor: MaterialStateProperty.all(_lightColorScheme.secondary),
+        ),
       );
 
   static ThemeData get dark => ThemeData(
@@ -216,6 +220,10 @@ abstract class CovoiceTheme {
           )
         ),
         disabledColor: _darkColorScheme.secondaryVariant,
+        checkboxTheme: CheckboxThemeData(
+          checkColor: MaterialStateProperty.all(_darkColorScheme.background),
+          fillColor: MaterialStateProperty.all(_darkColorScheme.secondary),
+        ),
       );
 
   static final customColors = CustomColors(
